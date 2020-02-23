@@ -1,4 +1,4 @@
-﻿sing System;
+﻿using System;
 
 namespace JsonValidation
 {
@@ -14,47 +14,57 @@ namespace JsonValidation
             return CheckForBorders(json) && CheckForInvalidCharacters(json);
         }
 
-        private static bool CheckForUnicode(string json)
+        private static bool CheckForUnicodeLetter(char toCheck)
         {
-            if (json == null)
-            {
-                throw new ArgumentNullException(json);
-            }
+            return (toCheck >= 'a' && toCheck <= 'z')
+                || (toCheck >= 'A' && toCheck <= 'Z');
+        }
 
-            if (json.IndexOf("\\u") == -1)
+        private static bool CheckForUnicodeDigit(char toCheck)
+        {
+            return toCheck >= '0' && toCheck <= '9';
+        }
+
+        private static bool CheckForUnicode(string json, ref int index)
+            {
+            if (index + 5 > json.Length)
             {
                 return false;
             }
 
-            int index = json.IndexOf("\\u");
-            if (json.Length < index + 5)
+            if (json[index + 1] != 'u')
             {
                 return false;
             }
 
             for (int i = index + 2; i <= index + 5; i++)
             {
-                if ((json[i] < '0' && json[i] > '9') && (json[i] < 'A' && json[i] > 'Z'))
+                if (!(CheckForUnicodeDigit(json[i]) || CheckForUnicodeLetter(json[i])))
                 {
                     return false;
                 }
             }
 
+            index += 5;
             return true;
-        }
+            }
 
         private static bool CheckForInvalidCharacters(string json)
         {
-            const string invalidCharacters = "\"\\";
-
             for (int i = 1; i < json.Length - 1; i++)
             {
-                if (char.IsControl(json[i]) && !CheckForException(json[i]))
+                if (char.IsControl(json[i]))
                 {
                     return false;
                 }
 
-                if (!CheckForUnicode(json) && invalidCharacters.IndexOf(json[i]) != -1)
+                if (json[i] == '\\' && !(CheckForUnicode(json, ref i) || CheckForException(json, ref i)))
+                {
+                    return false;
+                }
+
+                int previous = i - 1;
+                if (json[i] == '"' && !CheckForException(json, ref previous))
                 {
                     return false;
                 }
@@ -63,23 +73,20 @@ namespace JsonValidation
             return true;
         }
 
-        private static bool CheckForException(char json)
+        private static bool CheckForException(string json, ref int index)
         {
-            switch (json)
+            string[] exceptions = new[] { "\\n", "\\b", "\\f", "\\r", "\\t", "\\/" };
+            string toVerify = json.Substring(index, 2);
+
+            if (toVerify == "\\\\" || toVerify == "\\\"")
             {
-                case '\n':
+                index++;
+                return true;
+            }
 
-                case '\\':
-
-                case '\b':
-
-                case '\f':
-
-                case '\r':
-
-                case '\t':
-
-                case '\"':
+            foreach (string ex in exceptions)
+            {
+                if (ex == toVerify)
                 {
                     return true;
                 }

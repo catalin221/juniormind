@@ -64,7 +64,14 @@ namespace JsonValidationTests
 
         public void ValidatesComplexCorrectJsonString()
         {
-            const string testCase = "\"Test\\u0097\nAnother line\"";
+            const string testCase = "\"Test\\u0097\\nAnother line\"";
+            Assert.True(Program.ValidateJsonString(testCase));
+        }
+
+        [Fact]
+        public void ValidatesStringWithExceptedCase()
+        {
+            const string testCase = "\"test\\\\\"case\"";
             Assert.True(Program.ValidateJsonString(testCase));
         }
     }
