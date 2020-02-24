@@ -26,6 +26,13 @@ namespace JsonNumberValidation
 
         [Fact]
 
+        public void ValidateNegativeRationalNumber()
+        {
+            Assert.True(Program.ValidateJsonNumber("-12.34"));
+        }
+
+        [Fact]
+
         public void ValidatesNumberWithExponent()
         {
             Assert.True(Program.ValidateJsonNumber("12.123e3"));
