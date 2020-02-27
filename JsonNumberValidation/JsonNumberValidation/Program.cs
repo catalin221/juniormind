@@ -16,7 +16,7 @@ namespace JsonNumberValidation
                 return false;
             }
 
-            return CheckForIntegerNumber(number) || CheckForNegativeIntegerNumber(number) || CheckForRationalNumber(number);
+            return CheckForIntegerNumber(number) || CheckForNegativeIntegerNumber(number) || CheckForRationalNumber(number) || CheckForExponentFormat(number);
         }
 
         private static bool CheckForIntegerNumber(string number)
@@ -30,6 +30,35 @@ namespace JsonNumberValidation
             }
 
             return true;
+        }
+
+        private static bool CheckForShortExponentFormat(string number)
+        {
+            const string digits = "0123456789";
+            const string exponents = "eE";
+            return exponents.IndexOf(number[number.Length - 2]) != -1
+                && digits.IndexOf(number[number.Length - 1]) != -1;
+        }
+
+        private static bool CheckForSignedExponentFormat(string number)
+        {
+            const string digits = "0123456789";
+            const string exponents = "eE";
+            const string signs = "+-";
+
+            return exponents.IndexOf(number[number.Length - 3]) != -1
+                    && signs.IndexOf(number[number.Length - 2]) != -1
+                    && digits.IndexOf(number[number.Length - 1]) != -1;
+        }
+
+        private static bool CheckForExponentFormat(string number)
+        {
+            if (number.IndexOf('.') == -1)
+            {
+                return false;
+            }
+
+            return CheckForSignedExponentFormat(number) || CheckForShortExponentFormat(number);
         }
 
         private static bool CheckForNegativeIntegerNumber(string number)
