@@ -70,7 +70,7 @@ namespace JsonNumberValidation
 
             for (int i = 1; i < number.Length; i++)
             {
-                if (!(number[i] >= '0' && number[i] <= '9'))
+                if (number[i] < '0' || number[i] > '9')
                 {
                     return false;
                 }
