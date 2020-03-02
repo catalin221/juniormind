@@ -40,7 +40,7 @@ namespace StudentCatalogue
             testStudents[1] = new Student("Andrei", 9.00);
             testStudents[2] = new Student("Adi", 9.90);
             StudentsCatalogue testCatalogue = new StudentsCatalogue(testStudents);
-            Assert.True(testCatalogue.GetStudentByPosition(2) == "Paul");
+            Assert.True(testCatalogue.GetStudentByPosition(3) == "Adi");
         }
 
         [Fact]
@@ -52,7 +52,19 @@ namespace StudentCatalogue
             testStudents[1] = new Student("Paul", 9.30);
             testStudents[0] = new Student("Adi", 9.90);
             StudentsCatalogue testCatalogue = new StudentsCatalogue(testStudents);
-            Assert.True(testCatalogue.GetStudentPositionByName("Andrei") == 0);
+            Assert.Equal(0, testCatalogue.GetStudentPositionByName("Andrei"));
+        }
+
+        [Fact]
+
+        public void CheckThatStudentIsNotInCatalogueByName()
+        {
+            Student[] testStudents = new Student[3];
+            testStudents[2] = new Student("Andrei", 9.00);
+            testStudents[1] = new Student("Paul", 9.30);
+            testStudents[0] = new Student("Adi", 9.90);
+            StudentsCatalogue testCatalogue = new StudentsCatalogue(testStudents);
+            Assert.Equal(-1, testCatalogue.GetStudentPositionByName("George"));
         }
     }
 }
