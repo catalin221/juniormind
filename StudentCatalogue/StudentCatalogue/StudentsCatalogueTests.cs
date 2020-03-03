@@ -13,9 +13,9 @@ namespace StudentCatalogue
             testStudents[1] = new Student("Paul", 9.30);
             testStudents[2] = new Student("Adi", 9.90);
             StudentsCatalogue testCatalogue = new StudentsCatalogue(testStudents);
-            Assert.True(testStudents[0].Name == "Andrei" && (testStudents[0].Grade - 9.10) < 0.00001);
-            Assert.True(testStudents[1].Name == "Paul" && (testStudents[1].Grade - 9.30) < 0.00001);
-            Assert.True(testStudents[2].Name == "Adi" && (testStudents[2].Grade - 9.90) < 0.00001);
+            Assert.True(testStudents[0].GetName() == "Andrei" && (testStudents[0].GetGrade() - 9.10) < 0.00001);
+            Assert.True(testStudents[1].GetName() == "Paul" && (testStudents[1].GetGrade() - 9.30) < 0.00001);
+            Assert.True(testStudents[2].GetName() == "Adi" && (testStudents[2].GetGrade() - 9.90) < 0.00001);
         }
 
         [Fact]
@@ -28,7 +28,7 @@ namespace StudentCatalogue
             testStudents[2] = new Student("Adi", 9.90);
             StudentsCatalogue testCatalogue = new StudentsCatalogue(testStudents);
             testCatalogue.AddNewStudent(new Student("George", 8.40));
-            Assert.True(testCatalogue.Catalogue[3].Name == "George" && (testCatalogue.Catalogue[3].Grade - 8.40) < 0.0001);
+            Assert.True(testCatalogue.GetStudents()[3].GetName() == "George" && (testCatalogue.GetStudents()[3].GetGrade() - 8.40) < 0.0001);
         }
 
         [Fact]

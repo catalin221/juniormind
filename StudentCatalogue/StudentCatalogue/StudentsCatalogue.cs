@@ -4,37 +4,42 @@ namespace StudentCatalogue
 {
     public class StudentsCatalogue
     {
-        public Student[] Catalogue;
+        private Student[] catalogue;
 
         public StudentsCatalogue(Student[] catalogue)
         {
-            this.Catalogue = catalogue;
+            this.catalogue = catalogue;
         }
 
         public void AddNewStudent(Student toAdd)
         {
-            Student[] newCatalogue = new Student[Catalogue.Length + 1];
-            for (int i = 0; i < Catalogue.Length; i++)
+            Student[] newCatalogue = new Student[catalogue.Length + 1];
+            for (int i = 0; i < catalogue.Length; i++)
             {
-                newCatalogue[i] = Catalogue[i];
+                newCatalogue[i] = catalogue[i];
             }
 
-            newCatalogue[Catalogue.Length - 1] = toAdd;
-            Catalogue = newCatalogue;
+            newCatalogue[catalogue.Length - 1] = toAdd;
+            catalogue = newCatalogue;
+        }
+
+        public Student[] GetStudents()
+        {
+            return this.catalogue;
         }
 
         public string GetStudentByPosition(int position)
         {
-            SortStudentsByGrade(Catalogue);
-            return this.Catalogue[position - 1].Name;
+            SortStudentsByGrade(catalogue);
+            return this.catalogue[position - 1].GetName();
         }
 
         public int GetStudentPositionByName(string name)
         {
-            SortStudentsByGrade(Catalogue);
-            for (int i = 0; i < Catalogue.Length; i++)
+            SortStudentsByGrade(catalogue);
+            for (int i = 0; i < catalogue.Length; i++)
             {
-                if (Catalogue[i].Name == name)
+                if (catalogue[i].GetName() == name)
                 {
                     return i;
                 }
@@ -65,7 +70,7 @@ namespace StudentCatalogue
             int d = 0;
             while (i < j)
             {
-                if (students[i].Grade > students[j].Grade)
+                if (students[i].GetGrade() > students[j].GetGrade())
                 {
                     temp = students[i];
                     students[i] = students[j];

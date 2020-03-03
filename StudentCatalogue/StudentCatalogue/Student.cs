@@ -2,18 +2,28 @@
 {
     public class Student
     {
-        public double Grade;
-        public string Name;
+        private readonly string name;
+        private double grade;
 
         public Student(string name, double grade)
         {
-            this.Grade = grade;
-            this.Name = name;
+            this.grade = grade;
+            this.name = name;
+        }
+
+        public double GetGrade()
+        {
+            return this.grade;
+        }
+
+        public string GetName()
+        {
+            return this.name;
         }
 
         public void AddNewGrade(double newGrade)
         {
-            this.Grade = newGrade;
+            this.grade = newGrade;
         }
     }
 }
