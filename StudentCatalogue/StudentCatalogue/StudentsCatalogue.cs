@@ -28,18 +28,18 @@ namespace StudentCatalogue
             return this.catalogue;
         }
 
-        public string GetStudentByPosition(int position)
+        public string GetStudentByPositionInRanking(int position)
         {
             SortStudentsByGrade(catalogue);
             return this.catalogue[position - 1].GetName();
         }
 
-        public int GetStudentPositionByName(string name)
+        public int GetStudentPositionByNameInRanking(string name)
         {
             SortStudentsByGrade(catalogue);
             for (int i = 0; i < catalogue.Length; i++)
             {
-                if (catalogue[i].GetName() == name)
+                if (catalogue[i].MatchName(name))
                 {
                     return i;
                 }
@@ -70,7 +70,7 @@ namespace StudentCatalogue
             int d = 0;
             while (i < j)
             {
-                if (students[i].GetGrade() > students[j].GetGrade())
+                if (students[i].GetArithmeticAverage() > students[j].GetArithmeticAverage())
                 {
                     temp = students[i];
                     students[i] = students[j];
