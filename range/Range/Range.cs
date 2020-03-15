@@ -2,7 +2,7 @@
 
 namespace Range
 {
-    class Range
+    class Range : IPattern
     {
         private readonly char start;
         private readonly char end;
