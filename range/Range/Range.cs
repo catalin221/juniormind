@@ -13,14 +13,11 @@ namespace Range
             this.end = end;
         }
 
-        public bool Match(string text)
+        public IMatch Match(string text)
         {
-            if (string.IsNullOrEmpty(text))
-            {
-                return false;
-            }
-
-            return text[0] <= this.end && text[0] >= this.start;
+            return string.IsNullOrEmpty(text) || (text[0] < start || text[0] > end)
+                ? new FailedMatch(text)
+                : (IMatch)new SuccesMatch(text.Substring(1));
         }
     }
 }

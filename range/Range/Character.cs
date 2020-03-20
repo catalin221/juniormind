@@ -9,14 +9,11 @@
             this.pattern = pattern;
         }
 
-        public bool Match(string text)
+        public IMatch Match(string text)
         {
-            if (string.IsNullOrEmpty(text))
-            {
-                return false;
-            }
-
-            return text[0] == pattern;
+            return string.IsNullOrEmpty(text) || text[0] != pattern
+               ? new FailedMatch(text)
+               : (IMatch)new SuccesMatch(text.Substring(1));
         }
     }
 }

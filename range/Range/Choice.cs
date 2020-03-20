@@ -9,17 +9,18 @@
             this.patterns = patterns;
         }
 
-        public bool Match(string text)
+        public IMatch Match(string text)
         {
-            for (int i = 0; i < patterns.Length; i++)
+            foreach (var pattern in patterns)
             {
-                if (patterns[i].Match(text))
+                IMatch match = pattern.Match(text);
+                if (match.Success())
                 {
-                    return true;
+                    return match;
                 }
             }
 
-            return false;
+            return new FailedMatch(text);
         }
     }
 }

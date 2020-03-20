@@ -2,6 +2,6 @@
 {
     public interface IPattern
     {
-        bool Match(string text);
+        public IMatch Match(string text);
     }
 }
