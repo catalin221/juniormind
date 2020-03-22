@@ -9,6 +9,7 @@ namespace Range
         {
             var digit = new Choice(new Character('0'), new Range('1', '9'));
             Assert.True(digit.Match("012").Success());
+            Assert.Equal("12", digit.Match("012").RemainingText());
         }
 
         [Fact]
@@ -16,6 +17,7 @@ namespace Range
         {
             var digit = new Choice(new Character('0'), new Range('1', '9'));
             Assert.True(digit.Match("12").Success());
+            Assert.Equal("12", digit.Match("012").RemainingText());
         }
 
         [Fact]
@@ -23,6 +25,7 @@ namespace Range
         {
             var digit = new Choice(new Character('0'), new Range('1', '9'));
             Assert.True(digit.Match("92").Success());
+            Assert.Equal("2", digit.Match("92").RemainingText());
         }
 
         [Fact]
@@ -30,6 +33,7 @@ namespace Range
         {
             var digit = new Choice(new Character('0'), new Range('1', '9'));
             Assert.False(digit.Match("").Success());
+            Assert.Equal("", digit.Match("").RemainingText());
         }
 
         [Fact]
@@ -37,6 +41,7 @@ namespace Range
         {
             var digit = new Choice(new Character('0'), new Range('1', '9'));
             Assert.False(digit.Match(null).Success());
+            Assert.Null(digit.Match(null).RemainingText());
         }
 
         [Fact]
