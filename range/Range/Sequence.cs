@@ -17,8 +17,6 @@
             }
 
             string initialText = text;
-
-            SuccesMatch success = new SuccesMatch(text);
             for (int i = 0; i < patterns.Length; i++)
             {
                 IMatch match = patterns[i].Match(text);
@@ -27,11 +25,10 @@
                     return new FailedMatch(initialText);
                 }
 
-                success = new SuccesMatch(match.RemainingText());
                 text = match.RemainingText();
             }
 
-            return (IMatch)success;
+            return (IMatch)new SuccesMatch(text);
         }
     }
 }
