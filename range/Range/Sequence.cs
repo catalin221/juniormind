@@ -11,24 +11,17 @@
 
         public IMatch Match(string text)
         {
-            if (string.IsNullOrEmpty(text))
+            IMatch match = new SuccesMatch(text);
+            foreach (var pattern in patterns)
             {
-                return (IMatch)new FailedMatch(text);
-            }
-
-            string initialText = text;
-            for (int i = 0; i < patterns.Length; i++)
-            {
-                IMatch match = patterns[i].Match(text);
+                match = pattern.Match(match.RemainingText());
                 if (!match.Success())
                 {
-                    return new FailedMatch(initialText);
+                    return new FailedMatch(text);
                 }
-
-                text = match.RemainingText();
             }
 
-            return (IMatch)new SuccesMatch(text);
+            return match;
         }
     }
 }
