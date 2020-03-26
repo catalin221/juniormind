@@ -17,13 +17,8 @@
             }
 
             IMatch match = new SuccesMatch(text);
-            for (int i = 0; i < text.Length; i++)
+            while (match.Success())
             {
-                if (!match.Success())
-                {
-                    break;
-                }
-
                 match = pattern.Match(match.RemainingText());
             }
 

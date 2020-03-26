@@ -11,20 +11,9 @@
 
         public IMatch Match(string text)
         {
-            if (string.IsNullOrEmpty(text))
-            {
-                return (IMatch)new FailedMatch(text);
-            }
-
-            for (int i = 0; i < prefix.Length; i++)
-            {
-                if (prefix[i] != text[i])
-                {
-                    return (IMatch)new FailedMatch(text);
-                }
-            }
-
-            return (IMatch)new SuccesMatch(text.Substring(prefix.Length));
+            return string.IsNullOrEmpty(text) || prefix != text.Substring(0, prefix.Length)
+                ? (IMatch)new FailedMatch(text)
+                : new SuccesMatch(text.Substring(prefix.Length));
         }
     }
 }
