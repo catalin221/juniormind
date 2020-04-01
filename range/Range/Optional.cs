@@ -11,8 +11,10 @@
 
         public IMatch Match(string text)
         {
+            IMatch match = new SuccesMatch(pattern.Match(text).RemainingText());
+
             return pattern.Match(text).Success()
-               ? (IMatch)new SuccesMatch(text.Substring(1))
+               ? match
                : new SuccesMatch(text);
         }
     }
