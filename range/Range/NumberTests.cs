@@ -17,7 +17,7 @@ namespace Range
         {
             var number = new Number();
             Assert.True(number.Match("01234").Success());
-            Assert.Equal("1234", number.Match("01234").RemainingText());
+            Assert.Equal("", number.Match("01234").RemainingText());
         }
 
         [Fact]
