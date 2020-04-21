@@ -103,5 +103,16 @@ namespace Range
             Assert.True(hex.Match("f9").Success());
             Assert.Equal("9", hex.Match("f9").RemainingText());
         }
+
+        [Fact]
+        public void AddsPatternToInvalidStringAndValidatesAfter()
+        {
+            var pattern = new Choice(new Character('0'), new Range('1', '9'));
+            Assert.False(pattern.Match("a").Success());
+            Assert.Equal("a", pattern.Match("a").RemainingText());
+            pattern.Add(new Character('a'));
+            Assert.True(pattern.Match("a").Success());
+            Assert.Equal("", pattern.Match("a").RemainingText());
+        }
     }
 }
