@@ -1,4 +1,6 @@
-﻿namespace Range
+﻿using System;
+
+namespace Range
 {
     class Choice : IPattern
     {
@@ -30,14 +32,8 @@
 
         public void Add(IPattern pattern)
         {
-            IPattern[] newPatterns = new IPattern[patterns.Length + 1];
-            for (int i = 0; i < patterns.Length; i++)
-            {
-                newPatterns[i] = patterns[i];
-            }
-
-            newPatterns[newPatterns.Length - 1] = pattern;
-            patterns = newPatterns;
+            Array.Resize(ref patterns, patterns.Length + 1);
+            patterns[patterns.Length - 1] = pattern;
         }
     }
 }
