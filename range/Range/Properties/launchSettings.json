@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Range": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "Key": "Value"
+      }
+    }
+  }
+}

@@ -57,7 +57,7 @@ namespace Range
         {
             var number = new Number();
             Assert.True(number.Match("123.").Success());
-            Assert.Equal("", number.Match("123.").RemainingText());
+            Assert.Equal(".", number.Match("123.").RemainingText());
         }
 
         [Fact]
@@ -90,6 +90,14 @@ namespace Range
             var number = new Number();
             Assert.True(number.Match("123.12E-1").Success());
             Assert.Equal("", number.Match("123.12E-1").RemainingText());
+        }
+
+        [Fact]
+        public void InvalidatesStringThatIsNotNumber()
+        {
+            var number = new Number();
+            Assert.False(number.Match("[").Success());
+            Assert.Equal("[", number.Match("[").RemainingText());
         }
     }
 }

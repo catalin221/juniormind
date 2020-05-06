@@ -6,7 +6,7 @@
 
         public Number()
         {
-            var digits = new Many(new Range('0', '9'));
+            var digits = new OneOrMore(new Range('0', '9'));
             var signs = new Any("+-");
             var exponents = new Any("eE");
             var integerSide = new Sequence(new Optional(new Character('-')), new Sequence(digits));
