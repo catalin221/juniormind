@@ -8,11 +8,11 @@ namespace DataStructures
         public void ValidatesConstructor()
         {
             var test = new IntArray();
-            Assert.Equal(0, test.Count());
-            Assert.Equal(0, test.Element(0));
-            Assert.Equal(0, test.Element(1));
-            Assert.Equal(0, test.Element(2));
-            Assert.Equal(0, test.Element(3));
+            Assert.Equal(0, test.Count);
+            Assert.Equal(0, test[0]);
+            Assert.Equal(0, test[1]);
+            Assert.Equal(0, test[2]);
+            Assert.Equal(0, test[3]);
         }
 
         [Fact]
@@ -24,11 +24,11 @@ namespace DataStructures
             test.Add(2);
             test.Add(6);
             test.Add(7);
-            Assert.Equal(5, test.Element(0));
-            Assert.Equal(3, test.Element(1));
-            Assert.Equal(2, test.Element(2));
-            Assert.Equal(6, test.Element(3));
-            Assert.Equal(7, test.Element(4));
+            Assert.Equal(5, test[0]);
+            Assert.Equal(3, test[1]);
+            Assert.Equal(2, test[2]);
+            Assert.Equal(6, test[3]);
+            Assert.Equal(7, test[4]);
         }
 
         [Fact]
@@ -40,7 +40,7 @@ namespace DataStructures
             test.Add(2);
             test.Add(6);
             test.Add(7);
-            Assert.Equal(5, test.Count());
+            Assert.Equal(5, test.Count);
         }
 
         [Fact]
@@ -48,8 +48,8 @@ namespace DataStructures
         {
             var test = new IntArray();
             test.Add(5);
-            test.SetElement(0, 2);
-            Assert.Equal(2, test.Element(0));
+            test[0] = 2;
+            Assert.Equal(2, test[0]);
         }
 
         [Fact]
@@ -95,10 +95,10 @@ namespace DataStructures
             test.Add(5);
             test.Add(3);
             test.Insert(0, 4);
-            Assert.Equal(4, test.Element(0));
-            Assert.Equal(5, test.Element(1));
-            Assert.Equal(3, test.Element(2));
-            Assert.Equal(3, test.Count());
+            Assert.Equal(4, test[0]);
+            Assert.Equal(5, test[1]);
+            Assert.Equal(3, test[2]);
+            Assert.Equal(3, test.Count);
         }
 
         [Fact]
@@ -108,7 +108,7 @@ namespace DataStructures
             test.Add(5);
             test.Add(3);
             test.Clear();
-            Assert.Equal(0, test.Count());
+            Assert.Equal(0, test.Count);
         }
 
         [Fact]
@@ -118,7 +118,7 @@ namespace DataStructures
             test.Add(5);
             test.Add(3);
             test.Remove(5);
-            Assert.Equal(3, test.Element(0));
+            Assert.Equal(3, test[0]);
         }
 
         [Fact]
@@ -128,7 +128,7 @@ namespace DataStructures
             test.Add(5);
             test.Add(3);
             test.RemoveAt(0);
-            Assert.Equal(3, test.Element(0));
+            Assert.Equal(3, test[0]);
         }
     }
 }

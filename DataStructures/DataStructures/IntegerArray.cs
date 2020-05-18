@@ -5,56 +5,36 @@ namespace DataStructures
     public class IntArray
     {
         private int[] array;
-        private int count;
 
         public IntArray()
         {
             this.array = new int[4];
-            this.count = 0;
+            Count = 0;
+        }
+
+        public int Count { get; private set; }
+
+        public int this[int index]
+        {
+            get => array[index];
+            set => array[index] = value;
         }
 
         public void Add(int element)
         {
-            if (count == array.Length)
-            {
-                Array.Resize(ref array, array.Length * 2);
-            }
-
-            array[count] = element;
-            count++;
-        }
-
-        public int Count()
-        {
-            return this.count;
-        }
-
-        public int Element(int index)
-        {
-            return this.array[index];
-        }
-
-        public void SetElement(int index, int element)
-        {
-            this.array[index] = element;
+            EnsureCapactity();
+            array[Count] = element;
+            Count++;
         }
 
         public bool Contains(int element)
         {
-            for (int i = 0; i < count; i++)
-            {
-                if (array[i].Equals(element))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return IndexOf(element) != -1;
         }
 
         public int IndexOf(int element)
         {
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (array[i] == element)
                 {
@@ -67,29 +47,21 @@ namespace DataStructures
 
         public void Insert(int index, int element)
         {
-            if (count == array.Length)
-            {
-                Array.Resize(ref array, array.Length * 2);
-            }
-
-            for (int i = count; i > index; i--)
-            {
-                array[i] = array[i - 1];
-            }
-
+            EnsureCapactity();
+            ShiftRight(index);
             array[index] = element;
-            count++;
+            Count++;
         }
 
         public void Clear()
         {
-            this.count = 0;
+            this.Count = 0;
         }
 
         public void Remove(int element)
         {
             int index = 0;
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < Count; i++)
             {
                 if (array[i].Equals(element))
                 {
@@ -102,12 +74,34 @@ namespace DataStructures
 
         public void RemoveAt(int index)
         {
-            for (int i = count - 1; i > index; i--)
+            ShiftLeft(index);
+            Count--;
+        }
+
+        private void EnsureCapactity()
+        {
+            if (Count != array.Length)
+            {
+                return;
+            }
+
+            Array.Resize(ref array, array.Length * 2);
+        }
+
+        private void ShiftLeft(int index)
+        {
+            for (int i = Count - 1; i > index; i--)
             {
                 array[i - 1] = array[i];
             }
+        }
 
-            count--;
+        private void ShiftRight(int index)
+        {
+            for (int i = Count; i > index; i--)
+            {
+                array[i] = array[i - 1];
+            }
         }
     }
 }
