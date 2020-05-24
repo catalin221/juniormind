@@ -4,23 +4,22 @@ namespace DataStructures
 {
     public class IntArray
     {
-        private int[] array;
+        protected int[] array;
 
         public IntArray()
         {
             this.array = new int[4];
-            Count = 0;
         }
 
-        public int Count { get; private set; }
+        public int Count { get; protected set; }
 
-        public int this[int index]
+        public virtual int this[int index]
         {
             get => array[index];
             set => array[index] = value;
         }
 
-        public void Add(int element)
+        public virtual void Add(int element)
         {
             EnsureCapactity();
             array[Count] = element;
@@ -45,7 +44,7 @@ namespace DataStructures
             return -1;
         }
 
-        public void Insert(int index, int element)
+        public virtual void Insert(int index, int element)
         {
             EnsureCapactity();
             ShiftRight(index);
@@ -78,7 +77,7 @@ namespace DataStructures
             Count--;
         }
 
-        private void EnsureCapactity()
+        protected void EnsureCapactity()
         {
             if (Count != array.Length)
             {
@@ -88,7 +87,7 @@ namespace DataStructures
             Array.Resize(ref array, array.Length * 2);
         }
 
-        private void ShiftLeft(int index)
+        protected void ShiftLeft(int index)
         {
             for (int i = Count - 1; i > index; i--)
             {
@@ -96,7 +95,7 @@ namespace DataStructures
             }
         }
 
-        private void ShiftRight(int index)
+        protected void ShiftRight(int index)
         {
             for (int i = Count; i > index; i--)
             {
