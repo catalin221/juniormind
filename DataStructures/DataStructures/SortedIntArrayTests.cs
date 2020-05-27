@@ -44,13 +44,48 @@ namespace DataStructures
         }
 
         [Fact]
-        public void ValidatesSetElementMethod()
+        public void ValidatesSetElementMethodOnFirstIndex()
         {
             var test = new SortedIntArray();
             test.Add(5);
             test.Add(1);
             test[0] = 6;
             Assert.Equal(1, test[0]);
+        }
+
+        [Fact]
+        public void ValidatesSetElementForLastIndex()
+        {
+            var test = new SortedIntArray();
+            test.Add(5);
+            test.Add(1);
+            test.Add(4);
+            test[2] = 6;
+            Assert.Equal(6, test[2]);
+        }
+
+        [Fact]
+        public void ValidatesSetElementForAnyIndex()
+        {
+            var test = new SortedIntArray();
+            test.Add(5);
+            test.Add(1);
+            test.Add(4);
+            test.Add(2);
+            test[1] = 3;
+            Assert.Equal(3, test[1]);
+        }
+
+        [Fact]
+        public void DoesNotSetElementThatChangesOrder()
+        {
+            var test = new SortedIntArray();
+            test.Add(5);
+            test.Add(1);
+            test.Add(4);
+            test.Add(2);
+            test[1] = 5;
+            Assert.Equal(2, test[1]);
         }
 
         [Fact]

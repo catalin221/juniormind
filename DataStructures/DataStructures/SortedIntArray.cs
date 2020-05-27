@@ -10,12 +10,12 @@
         {
             set
                 {
-                if (!CheckNeighbours(index, value))
+                if (!CheckNeighboursSet(index, value))
                 {
                     return;
                 }
 
-                array[index] = value;
+                base[index] = value;
             }
         }
 
@@ -24,31 +24,28 @@
             EnsureCapactity();
             if (Count == 0)
             {
-                array[Count] = element;
+                base.Add(element);
             }
-            else if (Count > 0 && element > array[Count - 1])
+            else if (Count > 0 && element > base[Count - 1])
             {
-                array[Count] = element;
+                base.Add(element);
             }
             else
             {
                 for (int i = 0; i < Count; i++)
                 {
-                    if (element < array[i])
+                    if (element < base[i])
                     {
-                        ShiftRight(i);
-                        array[i] = element;
+                        base.Insert(i, element);
                         break;
                     }
                 }
             }
-
-            Count++;
         }
 
         public override void Insert(int index, int element)
         {
-            if (!CheckNeighbours(index, element))
+            if (!CheckNeighboursInsert(index, element))
             {
                 return;
             }
@@ -56,17 +53,35 @@
             base.Insert(index, element);
         }
 
-        private bool CheckNeighbours(int index, int element)
+        private bool CheckNeighboursSet(int index, int value)
         {
-            if (index == 0 && element > array[0])
+            if (index == 0 && value > base[1])
             {
                 return false;
             }
-            else if (index == Count - 1 && element < array[index - 1])
+            else if (index == Count - 1 && value < base[index - 1])
             {
                 return false;
             }
-            else if (index != 0 && (array[index - 1] > element || array[index + 1] < element))
+            else if (index != 0 && index != Count - 1 && (base[index - 1] > value || base[index + 1] < value))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool CheckNeighboursInsert(int index, int element)
+        {
+            if (index == 0 && element > base[0])
+            {
+                return false;
+            }
+            else if (index == Count - 1 && (element < base[index - 1] || element > base[index]))
+            {
+                return false;
+            }
+            else if (index != 0 && index != Count - 1 && (base[index - 1] > element || base[index] < element))
             {
                 return false;
             }

@@ -4,14 +4,14 @@ namespace DataStructures
 {
     public class IntArray
     {
-        protected int[] array;
+        private int[] array;
 
         public IntArray()
         {
             this.array = new int[4];
         }
 
-        public int Count { get; protected set; }
+        public int Count { get; private set; }
 
         public virtual int this[int index]
         {
@@ -87,7 +87,7 @@ namespace DataStructures
             Array.Resize(ref array, array.Length * 2);
         }
 
-        protected void ShiftLeft(int index)
+        private void ShiftLeft(int index)
         {
             for (int i = Count - 1; i > index; i--)
             {
@@ -95,7 +95,7 @@ namespace DataStructures
             }
         }
 
-        protected void ShiftRight(int index)
+        private void ShiftRight(int index)
         {
             for (int i = Count; i > index; i--)
             {
