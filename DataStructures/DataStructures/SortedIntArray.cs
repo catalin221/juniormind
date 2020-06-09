@@ -9,8 +9,8 @@
         public override int this[int index]
         {
             set
-                {
-                if (!CheckNeighboursSet(index, value))
+            {
+                if (!CheckNeighbours(index, value, index - 1, index + 1, "set"))
                 {
                     return;
                 }
@@ -20,13 +20,10 @@
         }
 
         public override void Add(int element)
-            {
+        {
             EnsureCapactity();
-            if (Count == 0)
-            {
-                base.Add(element);
-            }
-            else if (Count > 0 && element > base[Count - 1])
+
+            if (Count == 0 || (Count > 0 && element > base[Count - 1]))
             {
                 base.Add(element);
             }
@@ -45,7 +42,7 @@
 
         public override void Insert(int index, int element)
         {
-            if (!CheckNeighboursInsert(index, element))
+            if (!CheckNeighbours(index, element, index - 1, index, "insert"))
             {
                 return;
             }
@@ -53,35 +50,21 @@
             base.Insert(index, element);
         }
 
-        private bool CheckNeighboursSet(int index, int value)
+        private bool CheckNeighbours(int index, int element, int leftIndex, int rightIndex, string setOrInsert)
         {
-            if (index == 0 && value > base[1])
+            if (index == 0 && element > base[rightIndex])
             {
                 return false;
             }
-            else if (index == Count - 1 && value < base[index - 1])
+            else if (setOrInsert == "insert" && index == Count - 1 && (element < base[leftIndex] || element > base[rightIndex]))
             {
                 return false;
             }
-            else if (index != 0 && index != Count - 1 && (base[index - 1] > value || base[index + 1] < value))
+            else if (setOrInsert == "set" && index == Count - 1 && (element < base[leftIndex]))
             {
                 return false;
             }
-
-            return true;
-        }
-
-        private bool CheckNeighboursInsert(int index, int element)
-        {
-            if (index == 0 && element > base[0])
-            {
-                return false;
-            }
-            else if (index == Count - 1 && (element < base[index - 1] || element > base[index]))
-            {
-                return false;
-            }
-            else if (index != 0 && index != Count - 1 && (base[index - 1] > element || base[index] < element))
+            else if (index != 0 && index != Count - 1 && (base[leftIndex] > element || base[rightIndex] < element))
             {
                 return false;
             }

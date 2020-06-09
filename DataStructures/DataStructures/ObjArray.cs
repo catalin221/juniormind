@@ -1,12 +1,13 @@
 ﻿using System;
+using System.Collections;
 
 namespace DataStructures
 {
-    public class ObjArray
+    public class ObjArrayCollection : IEnumerable
     {
         private object[] array;
 
-        public ObjArray()
+        public ObjArrayCollection()
         {
             this.array = new object[4];
         }
@@ -17,6 +18,16 @@ namespace DataStructures
         {
             get => array[index];
             set => array[index] = value;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return (IEnumerator)GetEnumerator();
+        }
+
+        public ObjectEnumerator GetEnumerator()
+        {
+            return new ObjectEnumerator(this);
         }
 
         public virtual void Add(object element)
@@ -35,7 +46,7 @@ namespace DataStructures
         {
             for (int i = 0; i < Count; i++)
             {
-                if (array[i] == element)
+                if (array[i].Equals(element))
                 {
                     return i;
                 }
