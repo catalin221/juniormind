@@ -22,12 +22,10 @@ namespace DataStructures
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return (IEnumerator)GetEnumerator();
-        }
-
-        public ObjectEnumerator GetEnumerator()
-        {
-            return new ObjectEnumerator(this);
+            for (int i = 0; i < Count; i++)
+            {
+                yield return this[i];
+            }
         }
 
         public virtual void Add(object element)
