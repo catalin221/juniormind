@@ -7,17 +7,17 @@ namespace DataStructures
         [Fact]
         public void IterationTest()
         {
-            var testArray = new ObjArrayCollection { 1, "Andrei", 'a', 3.5 };
-            var cloneTestArray = new ObjArrayCollection();
+            var testArray = new List<int> { 1, 2, 3, 4 };
+            var cloneTestArray = new List<int>();
             foreach (var obj in testArray)
             {
                 cloneTestArray.Add(obj);
             }
 
             Assert.Equal(1, cloneTestArray[0]);
-            Assert.Equal("Andrei", cloneTestArray[1]);
-            Assert.Equal('a', cloneTestArray[2]);
-            Assert.Equal(3.5, cloneTestArray[3]);
+            Assert.Equal(2, cloneTestArray[1]);
+            Assert.Equal(3, cloneTestArray[2]);
+            Assert.Equal(4, cloneTestArray[3]);
         }
     }
 }
