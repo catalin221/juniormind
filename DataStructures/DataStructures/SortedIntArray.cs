@@ -10,7 +10,7 @@
         {
             set
             {
-                if (!CheckNeighbours(index, value, index - 1, index + 1, "set"))
+                if (!CheckNeighbours(index, value, index - 1, index + 1))
                 {
                     return;
                 }
@@ -42,7 +42,7 @@
 
         public override void Insert(int index, int element)
         {
-            if (!CheckNeighbours(index, element, index - 1, index, "insert"))
+            if (!CheckNeighbours(index, element, index - 1, index))
             {
                 return;
             }
@@ -50,21 +50,22 @@
             base.Insert(index, element);
         }
 
-        private bool CheckNeighbours(int index, int element, int leftIndex, int rightIndex, string setOrInsert)
+        public int ElementAt(int index, int value)
+        {
+            return index < Count ? base[index] : value;
+        }
+
+        private bool CheckNeighbours(int index, int element, int leftIndex, int rightIndex)
         {
             if (index == 0 && element > base[rightIndex])
             {
                 return false;
             }
-            else if (setOrInsert == "insert" && index == Count - 1 && (element < base[leftIndex] || element > base[rightIndex]))
+            else if (index == Count - 1 && (element < ElementAt(leftIndex, element) || element > ElementAt(rightIndex, element)))
             {
                 return false;
             }
-            else if (setOrInsert == "set" && index == Count - 1 && (element < base[leftIndex]))
-            {
-                return false;
-            }
-            else if (index != 0 && index != Count - 1 && (base[leftIndex] > element || base[rightIndex] < element))
+            else if (index != 0 && index != Count - 1 && (ElementAt(leftIndex, element) > element || ElementAt(rightIndex, element) < element))
             {
                 return false;
             }

@@ -48,8 +48,8 @@ namespace DataStructures
         {
             var test = new List<int>();
             test.Add(5);
-            test[0] = 'c';
-            Assert.Equal('c', test[0]);
+            test[0] = 6;
+            Assert.Equal(6, test[0]);
         }
 
         [Fact]
@@ -75,8 +75,8 @@ namespace DataStructures
         {
             var test = new List<int>();
             test.Add(5);
-            test.Add('b');
-            Assert.Equal(1, test.IndexOf('b'));
+            test.Add(3);
+            Assert.Equal(1, test.IndexOf(3));
         }
 
         [Fact]
@@ -84,7 +84,7 @@ namespace DataStructures
         {
             var test = new List<int>();
             test.Add(5);
-            test.Add('b');
+            test.Add(4);
             Assert.Equal(-1, test.IndexOf(1000));
         }
 
