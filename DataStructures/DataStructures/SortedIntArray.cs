@@ -10,7 +10,10 @@
         {
             set
             {
-                if (!CheckNeighbours(index, value, index - 1, index + 1))
+                int leftSide = ElementAt(index - 1, value);
+                int rightSide = ElementAt(index + 1, value);
+
+                if (leftSide > value || value > rightSide)
                 {
                     return;
                 }
@@ -42,7 +45,10 @@
 
         public override void Insert(int index, int element)
         {
-            if (!CheckNeighbours(index, element, index - 1, index))
+            int leftSide = ElementAt(index - 1, element);
+            int rightSide = ElementAt(index, base[index]);
+
+            if (leftSide > element || rightSide < element)
             {
                 return;
             }
@@ -52,25 +58,7 @@
 
         public int ElementAt(int index, int value)
         {
-            return index < Count ? base[index] : value;
-        }
-
-        private bool CheckNeighbours(int index, int element, int leftIndex, int rightIndex)
-        {
-            if (index == 0 && element > base[rightIndex])
-            {
-                return false;
-            }
-            else if (index == Count - 1 && (element < ElementAt(leftIndex, element) || element > ElementAt(rightIndex, element)))
-            {
-                return false;
-            }
-            else if (index != 0 && index != Count - 1 && (ElementAt(leftIndex, element) > element || ElementAt(rightIndex, element) < element))
-            {
-                return false;
-            }
-
-            return true;
+            return index < Count && index > -1 ? base[index] : value;
         }
     }
 }

@@ -137,6 +137,47 @@ namespace DataStructures
         }
 
         [Fact]
+        public void ValidatesInsertMethodWhereMoreElementsAreEqual()
+        {
+            var test = new SortedIntArray();
+            test.Add(3);
+            test.Add(5);
+            test.Add(3);
+            test.Add(2);
+            test.Add(2);
+
+            test.Insert(2, 2);
+            Assert.Equal(2, test[0]);
+            Assert.Equal(2, test[1]);
+            Assert.Equal(2, test[2]);
+            Assert.Equal(3, test[3]);
+            Assert.Equal(3, test[4]);
+            Assert.Equal(5, test[5]);
+
+            Assert.Equal(6, test.Count);
+        }
+
+        [Fact]
+        public void DoesNotInsertBadElement()
+        {
+            var test = new SortedIntArray();
+            test.Add(3);
+            test.Add(5);
+            test.Add(3);
+            test.Add(2);
+            test.Add(2);
+
+            test.Insert(2, 5);
+            Assert.Equal(2, test[0]);
+            Assert.Equal(2, test[1]);
+            Assert.Equal(3, test[2]);
+            Assert.Equal(3, test[3]);
+            Assert.Equal(5, test[4]);
+
+            Assert.Equal(5, test.Count);
+        }
+
+        [Fact]
         public void ValidatesInsertMethodAndInsertsAnElement()
         {
             var test = new SortedIntArray();

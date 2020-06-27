@@ -13,7 +13,10 @@ namespace DataStructures
         {
             set
             {
-                if (!CheckNeighbours(index, value, index - 1, index + 1))
+                T leftSide = ElementAt(index - 1, value);
+                T rightSide = ElementAt(index + 1, value);
+
+                if (value.CompareTo(leftSide) == -1 || value.CompareTo(rightSide) == 1)
                 {
                     return;
                 }
@@ -24,7 +27,10 @@ namespace DataStructures
 
         public override void Insert(int index, T element)
         {
-            if (!CheckNeighbours(index, element, index - 1, index))
+            T leftSide = ElementAt(index - 1, element);
+            T rightSide = ElementAt(index, base[index]);
+
+            if (leftSide.CompareTo(element) == 1 || rightSide.CompareTo(element) == -1)
             {
                 return;
             }
@@ -55,25 +61,7 @@ namespace DataStructures
 
         public T ElementAt(int index, T value)
         {
-            return index < Count ? base[index] : value;
-        }
-
-        private bool CheckNeighbours(int index, T element, int leftIndex, int rightIndex)
-        {
-            if (index == 0 && element.CompareTo(base[rightIndex]) == 1)
-            {
-                return false;
-            }
-            else if (index == Count - 1 && (element.CompareTo(ElementAt(leftIndex, element)) == -1 || element.CompareTo(ElementAt(rightIndex, element)) == 1))
-            {
-                return false;
-            }
-            else if (index != 0 && index != Count - 1 && (ElementAt(leftIndex, element).CompareTo(element) == 1 || ElementAt(rightIndex, element).CompareTo(element) == -1))
-            {
-                return false;
-            }
-
-            return true;
+            return index < Count && index > -1 ? base[index] : value;
         }
     }
 }
