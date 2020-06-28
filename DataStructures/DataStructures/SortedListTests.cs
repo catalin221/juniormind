@@ -8,7 +8,7 @@ namespace DataStructures
         public void ValidatesConstructor()
         {
             var test = new SortedList<int>();
-            Assert.Equal(0, test.Count);
+            Assert.Empty(test);
             Assert.Equal(0, test[0]);
             Assert.Equal(0, test[1]);
             Assert.Equal(0, test[2]);
@@ -94,7 +94,7 @@ namespace DataStructures
             var test = new SortedList<int>();
             test.Add(5);
             test.Add(3);
-            Assert.True(test.Contains(3));
+            Assert.Contains(3, test);
         }
 
         [Fact]
@@ -103,7 +103,7 @@ namespace DataStructures
             var test = new SortedList<int>();
             test.Add(5);
             test.Add(3);
-            Assert.False(test.Contains(2));
+            Assert.DoesNotContain(2, test);
         }
 
         [Fact]
@@ -156,7 +156,7 @@ namespace DataStructures
             test.Add(5);
             test.Add(3);
             test.Clear();
-            Assert.Equal(0, test.Count);
+            Assert.Empty(test);
         }
 
         [Fact]

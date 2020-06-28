@@ -4,21 +4,23 @@ using System.Collections.Generic;
 
 namespace DataStructures
 {
-    public class List<T> : IEnumerable<T>
+    public class List<T> : IList<T>
     {
-        private T[] array;
+        private T[] listArray;
 
         public List()
         {
-            this.array = new T[4];
+            this.listArray = new T[4];
         }
 
         public int Count { get; private set; }
 
+        public bool IsReadOnly { get; }
+
         public virtual T this[int index]
         {
-            get => array[index];
-            set => array[index] = value;
+            get => listArray[index];
+            set => listArray[index] = value;
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -26,31 +28,36 @@ namespace DataStructures
             return this.GetEnumerator();
         }
 
+        public void CopyTo(T[] array, int arrayIndex)
+        {
+            listArray.CopyTo(array, arrayIndex);
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             for (int i = 0; i < Count; i++)
             {
-                yield return array[i];
+                yield return listArray[i];
             }
         }
 
-        public virtual void Add(T element)
+        public virtual void Add(T item)
         {
             EnsureCapactity();
-            array[Count] = element;
+            listArray[Count] = item;
             Count++;
         }
 
-        public bool Contains(T element)
+        public bool Contains(T item)
         {
-            return IndexOf(element) != -1;
+            return IndexOf(item) != -1;
         }
 
-        public int IndexOf(T element)
+        public int IndexOf(T item)
         {
             for (int i = 0; i < Count; i++)
             {
-                if (array[i].Equals(element))
+                if (listArray[i].Equals(item))
                 {
                     return i;
                 }
@@ -59,11 +66,11 @@ namespace DataStructures
             return -1;
         }
 
-        public virtual void Insert(int index, T element)
+        public virtual void Insert(int index, T item)
         {
             EnsureCapactity();
             ShiftRight(index);
-            array[index] = element;
+            listArray[index] = item;
             Count++;
         }
 
@@ -72,18 +79,26 @@ namespace DataStructures
             this.Count = 0;
         }
 
-        public void Remove(object element)
+        public bool Remove(T item)
         {
+            if (!Contains(item))
+            {
+                return false;
+            }
+
             int index = 0;
             for (int i = 0; i < Count; i++)
             {
-                if (array[i].Equals(element))
+                if (listArray[i].Equals(item))
                 {
                     index = i;
+                    break;
                 }
             }
 
             RemoveAt(index);
+
+            return true;
         }
 
         public void RemoveAt(int index)
@@ -94,19 +109,19 @@ namespace DataStructures
 
         protected void EnsureCapactity()
         {
-            if (Count != array.Length)
+            if (Count != listArray.Length)
             {
                 return;
             }
 
-            Array.Resize<T>(ref array, array.Length * 2);
+            Array.Resize<T>(ref listArray, listArray.Length * 2);
         }
 
         private void ShiftLeft(int index)
         {
             for (int i = Count - 1; i > index; i--)
             {
-                array[i - 1] = array[i];
+                listArray[i - 1] = listArray[i];
             }
         }
 
@@ -114,7 +129,7 @@ namespace DataStructures
         {
             for (int i = Count; i > index; i--)
             {
-                array[i] = array[i - 1];
+                listArray[i] = listArray[i - 1];
             }
         }
     }

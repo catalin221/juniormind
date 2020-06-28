@@ -8,7 +8,7 @@ namespace DataStructures
         public void ValidatesConstructor()
         {
             var test = new List<int>();
-            Assert.Equal(0, test.Count);
+            Assert.Empty(test);
             Assert.Equal(0, test[0]);
             Assert.Equal(0, test[1]);
             Assert.Equal(0, test[2]);
@@ -58,7 +58,7 @@ namespace DataStructures
             var test = new List<int>();
             test.Add(1);
             test.Add(3);
-            Assert.True(test.Contains(1));
+            Assert.Contains(1, test);
         }
 
         [Fact]
@@ -67,7 +67,7 @@ namespace DataStructures
             var test = new List<int>();
             test.Add(1);
             test.Add(3);
-            Assert.False(test.Contains(2));
+            Assert.DoesNotContain(2, test);
         }
 
         [Fact]
@@ -107,7 +107,7 @@ namespace DataStructures
             var test = new List<int> { 5, 3 };
 
             test.Clear();
-            Assert.Equal(0, test.Count);
+            Assert.Empty(test);
         }
 
         [Fact]
@@ -128,6 +128,28 @@ namespace DataStructures
             test.Add(3);
             test.RemoveAt(0);
             Assert.Equal(3, test[0]);
+        }
+
+        [Fact]
+        public void ValidatesIListRemoveMethodAndDoesNotFindElement()
+        {
+            var test = new List<int>();
+            test.Add(5);
+            test.Add(6);
+            test.Add(4);
+            test.Add(1);
+            Assert.False(test.Remove(15));
+        }
+
+        [Fact]
+        public void ValidatesIListRemoveMethod()
+        {
+            var test = new List<int>();
+            test.Add(5);
+            test.Add(6);
+            test.Add(4);
+            test.Add(1);
+            Assert.True(test.Remove(5));
         }
     }
 }
