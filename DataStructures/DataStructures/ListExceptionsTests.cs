@@ -13,10 +13,42 @@ namespace DataStructures
         }
 
         [Fact]
+        public void IndexerSetMethodIsReadonlyException()
+        {
+            var testList = new List<int> { 1, 2 };
+            testList = testList.ReadOnlyList();
+            Assert.Throws<NotSupportedException>(() => testList[0] = 2);
+        }
+
+        [Fact]
         public void IndexerGetMethodOutOfRangeException()
         {
             var testList = new List<int>();
             Assert.Throws<ArgumentOutOfRangeException>(() => testList[-1] == 1);
+        }
+
+        [Fact]
+        public void AddMethodIsReadonlyException()
+        {
+            var testList = new List<int> { 1, 2 };
+            testList = testList.ReadOnlyList();
+            Assert.Throws<NotSupportedException>(() => testList.Add(2));
+        }
+
+        [Fact]
+        public void ClearMethodIsReadonlyException()
+        {
+            var testList = new List<int> { 1, 2 };
+            testList = testList.ReadOnlyList();
+            Assert.Throws<NotSupportedException>(() => testList.Clear());
+        }
+
+        [Fact]
+        public void InsertMethodIsReadonlyException()
+        {
+            var testList = new List<int> { 1, 2 };
+            testList = testList.ReadOnlyList();
+            Assert.Throws<NotSupportedException>(() => testList.Insert(1, 2));
         }
 
         [Fact]

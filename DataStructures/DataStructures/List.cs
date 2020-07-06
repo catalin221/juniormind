@@ -10,12 +10,14 @@ namespace DataStructures
 
         public List()
         {
-            this.listArray = new T[4];
+            listArray = new T[4];
         }
 
         public int Count { get; private set; }
 
-        public bool IsReadOnly { get; }
+        public bool IsReadOnly { get => MakeReadOnly; }
+
+        public bool MakeReadOnly { get; protected set; }
 
         public virtual T this[int index]
         {
@@ -44,6 +46,18 @@ namespace DataStructures
             NegativeIndexException(arrayIndex);
             ArgumentException(array, arrayIndex);
             listArray.CopyTo(array, arrayIndex);
+        }
+
+        public List<T> ReadOnlyList()
+        {
+            List<T> newList = new List<T>();
+            foreach (var element in this)
+            {
+                newList.Add(element);
+            }
+
+            newList.MakeReadOnly = true;
+            return newList;
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -139,7 +153,7 @@ namespace DataStructures
 
         private void OutOfBoundsException(int index)
         {
-            if (index >= 0 && index <= Count - 1)
+            if ((Count == 0 && index >= 0) || (index >= 0 && index <= Count - 1))
             {
                 return;
             }
@@ -179,7 +193,7 @@ namespace DataStructures
 
         private void IsReadonlyException()
             {
-            if (!listArray.IsReadOnly)
+            if (!IsReadOnly)
             {
                 return;
             }
