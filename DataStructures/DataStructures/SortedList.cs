@@ -59,7 +59,7 @@ namespace DataStructures
             }
         }
 
-        public T ElementAt(int index, T value)
+        private T ElementAt(int index, T value)
         {
             return index < Count && index > -1 ? base[index] : value;
         }

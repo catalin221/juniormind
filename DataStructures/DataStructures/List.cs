@@ -19,8 +19,18 @@ namespace DataStructures
 
         public virtual T this[int index]
         {
-            get => listArray[index];
-            set => listArray[index] = value;
+            get
+            {
+                OutOfBoundsException(index);
+                return listArray[index];
+            }
+
+            set
+            {
+                IsReadonlyException();
+                OutOfBoundsException(index);
+                listArray[index] = value;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -30,6 +40,9 @@ namespace DataStructures
 
         public void CopyTo(T[] array, int arrayIndex)
         {
+            ArgumentNullException(array);
+            NegativeIndexException(arrayIndex);
+            ArgumentException(array, arrayIndex);
             listArray.CopyTo(array, arrayIndex);
         }
 
@@ -43,6 +56,7 @@ namespace DataStructures
 
         public virtual void Add(T item)
         {
+            IsReadonlyException();
             EnsureCapactity();
             listArray[Count] = item;
             Count++;
@@ -68,6 +82,8 @@ namespace DataStructures
 
         public virtual void Insert(int index, T item)
         {
+            IsReadonlyException();
+            OutOfBoundsException(index);
             EnsureCapactity();
             ShiftRight(index);
             listArray[index] = item;
@@ -76,11 +92,13 @@ namespace DataStructures
 
         public void Clear()
         {
+            IsReadonlyException();
             this.Count = 0;
         }
 
         public bool Remove(T item)
         {
+            IsReadonlyException();
             if (!Contains(item))
             {
                 return false;
@@ -103,6 +121,8 @@ namespace DataStructures
 
         public void RemoveAt(int index)
         {
+            IsReadonlyException();
+            OutOfBoundsException(index);
             ShiftLeft(index);
             Count--;
         }
@@ -115,6 +135,56 @@ namespace DataStructures
             }
 
             Array.Resize<T>(ref listArray, listArray.Length * 2);
+        }
+
+        private void OutOfBoundsException(int index)
+        {
+            if (index >= 0 && index <= Count - 1)
+            {
+                return;
+            }
+
+            throw new ArgumentOutOfRangeException("index");
+        }
+
+        private void ArgumentException(T[] array, int index)
+        {
+            if (array.Length - index >= Count)
+            {
+                return;
+            }
+
+            throw new ArgumentException("Destination array doesn't have enough space for the operation");
+        }
+
+        private void NegativeIndexException(int index)
+        {
+            if (index >= 0)
+            {
+                return;
+            }
+
+            throw new ArgumentOutOfRangeException("index");
+        }
+
+        private void ArgumentNullException(T[] array)
+        {
+            if (array != null)
+            {
+                return;
+            }
+
+            throw new ArgumentNullException("array");
+        }
+
+        private void IsReadonlyException()
+            {
+            if (!listArray.IsReadOnly)
+            {
+                return;
+            }
+
+            throw new NotSupportedException();
         }
 
         private void ShiftLeft(int index)
