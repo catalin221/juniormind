@@ -8,12 +8,14 @@ namespace DataStructures
     {
         public LinkedListCollection()
         {
-            Head = null;
-            Tail = null;
+            Sentinel.Next = Sentinel;
+            Sentinel.Previous = Sentinel;
         }
 
         public LinkedListCollection(T[] data)
         {
+            Sentinel.Next = Sentinel;
+            Sentinel.Previous = Sentinel;
             ArrayNullException(data);
             foreach (var x in data)
             {
@@ -21,9 +23,7 @@ namespace DataStructures
             }
         }
 
-        public LinkedListNode<T> Head { get; set; }
-
-        public LinkedListNode<T> Tail { get; set; }
+        public LinkedListNode<T> Sentinel { get; set; }
 
         public int Count { get; private set;  }
 
@@ -33,8 +33,6 @@ namespace DataStructures
 
         public void Add(T item)
         {
-            AlreadyInListException(item);
-            IsReadonlyException();
             LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
             Add(toAdd);
         }
@@ -43,27 +41,12 @@ namespace DataStructures
         {
             IsReadonlyException();
             NullNodeException(node);
-            if (Tail == null)
-            {
-                Head = node;
-            }
-            else
-            {
-                node.Previous = Tail;
-                Tail.Next = node;
-            }
-
-            Tail = node;
-            Head.Previous = Tail;
-            Tail.Next = Head;
-            Count++;
+            AlreadyInListException(node.Value);
+            AddBefore(Sentinel, node.Value);
         }
 
         public void AddFirst(T item)
         {
-            IsReadonlyException();
-            AlreadyInListException(item);
-            NullItemException(item);
             LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
             AddFirst(toAdd);
         }
@@ -72,67 +55,30 @@ namespace DataStructures
         {
             IsReadonlyException();
             NullNodeException(node);
-            if (Head == null)
-            {
-                Tail = node;
-            }
-            else
-            {
-                node.Next = Head;
-                Head.Previous = node;
-            }
-
-            Head = node;
-            Head.Previous = Tail;
-            Tail.Next = Head;
-            Count++;
+            AlreadyInListException(node.Value);
+            AddAfter(Sentinel, node.Value);
         }
 
         public void AddBefore(LinkedListNode<T> node, T item)
         {
-            IsReadonlyException();
-            AlreadyInListException(item);
             NullNodeException(node);
-            NullItemException(item);
-            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
-            if (node == Head)
-            {
-                AddFirst(node);
-                return;
-            }
-
-            // linking nodes
-            node.Previous.Next = toAdd;
-            toAdd.Previous = node.Previous;
-            node.Previous = toAdd;
-            toAdd.Next = node;
-            Count++;
+            LinkedListNode<T> nextLink = node.Next;
+            LinkedListNode<T> previousLink = node.Previous;
+            GenericAdd(node, item, previousLink, nextLink);
         }
 
         public void AddAfter(LinkedListNode<T> node, T item)
         {
-            IsReadonlyException();
-            AlreadyInListException(item);
             NullNodeException(node);
-            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
-            if (node == Tail)
-            {
-                Add(node);
-                return;
-            }
-
-            // linking nodes
-            node.Next.Previous = toAdd;
-            toAdd.Next = node.Next;
-            node.Next = toAdd;
-            toAdd.Previous = node;
-            Count++;
+            LinkedListNode<T> nextLink = node.Next;
+            LinkedListNode<T> previousLink = node.Previous;
+            GenericAdd(node, item, nextLink, previousLink);
         }
 
         public void Clear()
         {
-            Head = null;
-            Tail = null;
+            Sentinel.Previous = null;
+            Sentinel.Next = null;
             Count = 0;
         }
 
@@ -143,36 +89,25 @@ namespace DataStructures
 
         public LinkedListNode<T> Find(T item)
         {
-            if (Head == null)
-            {
-                return null;
-            }
-
-            LinkedListNode<T> current = Head;
-            while (current.Next != Head)
+           for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
             {
                 if (current.Value.Equals(item))
                 {
                     return current;
                 }
-
-                current = current.Next;
             }
 
-            return null;
+           return null;
         }
 
         public LinkedListNode<T> FindLast(T item)
         {
-            LinkedListNode<T> current = Tail;
-            while (current.Previous != Tail)
+            for (LinkedListNode<T> current = Sentinel.Previous; current != Sentinel; current = current.Previous)
             {
                 if (current.Value.Equals(item))
                 {
                     return current;
                 }
-
-                current = current.Next;
             }
 
             return null;
@@ -183,27 +118,21 @@ namespace DataStructures
             ArrayNullException(array);
             NegativeIndexException(arrayIndex);
             ArgumentException(array, arrayIndex);
-            LinkedListNode<T> current = Head;
-            int index = 0;
-            while (current.Next != Head)
+            int index = -1;
+            for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
             {
-                array[index] = current.Value;
-                current = current.Next;
-                index++;
+                array[index++] = current.Value;
             }
-
-            array[index] = Tail.Value;
         }
 
         public bool Remove(T item)
         {
             IsReadonlyException();
-            LinkedListNode<T> current = Head;
-            while (current.Next != Head)
+            for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
             {
                 if (current.Value.Equals(item))
                 {
-                    if (current.Next == Head)
+                    if (current.Next == Sentinel)
                     {
                         RemoveLast();
                     }
@@ -212,7 +141,7 @@ namespace DataStructures
                         current.Next.Previous = current.Previous;
                     }
 
-                    if (current.Previous == Tail)
+                    if (current.Previous == Sentinel)
                     {
                         RemoveFirst();
                     }
@@ -221,14 +150,9 @@ namespace DataStructures
                         current.Previous.Next = current.Next;
                     }
 
-#pragma warning disable S1854 // Unused assignments should be removed
-                    current = null;
-#pragma warning restore S1854 // Unused assignments should be removed
                     Count--;
                     return true;
                 }
-
-                current = current.Next;
             }
 
             return false;
@@ -237,48 +161,62 @@ namespace DataStructures
         public void RemoveLast()
         {
             IsReadonlyException();
-            if (Tail == null)
+            if (Sentinel.Next == Sentinel)
             {
-                Head = null;
                 return;
             }
 
-            Tail = Tail.Previous;
-            Tail.Next = null;
-            Head.Previous = Tail;
-            Tail.Next = Head;
+            LinkedListNode<T> last = Sentinel.Previous;
+            last = last.Previous;
+            last.Next = null;
+            last.Next = Sentinel;
+            Sentinel.Previous = last;
             Count--;
         }
 
         public void RemoveFirst()
         {
             IsReadonlyException();
-            if (Head == null)
+            if (Sentinel.Previous == Sentinel)
             {
-                Tail = null;
                 return;
             }
 
-            Head = Head.Next;
-            Head.Previous = null;
-            Tail.Next = Head;
-            Head.Previous = Tail;
+            LinkedListNode<T> first = Sentinel.Next;
+            first = first.Next;
+            first.Previous = null;
+            first.Previous = Sentinel;
+            Sentinel.Next = first;
             Count--;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            LinkedListNode<T> current = Head;
-            while (current != null)
+            for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
             {
                 yield return current.Value;
-                current = current.Next;
             }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        private void GenericAdd(LinkedListNode<T> node, T item, LinkedListNode<T> nextLink, LinkedListNode<T> previousLink)
+        {
+            IsReadonlyException();
+            AlreadyInListException(item);
+            NullItemException(item);
+            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
+            node.SetLinks(previousLink, nextLink);
+
+            // linking nodes
+            node.Next.Previous = toAdd;
+            toAdd.Next = node.Next;
+            node.Next = toAdd;
+            toAdd.Previous = node;
+            Count++;
         }
 
         private void NullItemException(T item)
