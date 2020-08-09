@@ -19,7 +19,7 @@ namespace DataStructures
             var list = new LinkedListCollection<int>(array);
             Assert.Equal(1, list.Sentinel.Next.Value);
             Assert.Equal(4, list.Sentinel.Previous.Value);
-            LinkedListNode<int> current = list.Sentinel;
+            LinkedListNode<int> current = list.Sentinel.Next;
             foreach (int digit in array)
             {
                 Assert.Equal(digit, current.Value);
@@ -98,8 +98,7 @@ namespace DataStructures
         public void ValidatesFindLastMethod()
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3, 4, 5 });
-            LinkedListNode<int> current = list.Sentinel.Previous.Previous;
-            Assert.Equal(current, list.Find(4));
+            Assert.Equal(list.Sentinel.Previous.Previous, list.Find(4));
         }
 
         [Fact]
@@ -116,7 +115,8 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
             list.Clear();
-            Assert.Empty(list);
+            Assert.Null(list.Sentinel);
+            Assert.Equal(0, list.Count);
         }
 
         [Fact]

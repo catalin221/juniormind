@@ -8,14 +8,12 @@ namespace DataStructures
     {
         public LinkedListCollection()
         {
-            Sentinel.Next = Sentinel;
-            Sentinel.Previous = Sentinel;
+            CreateSentinel();
         }
 
         public LinkedListCollection(T[] data)
         {
-            Sentinel.Next = Sentinel;
-            Sentinel.Previous = Sentinel;
+            CreateSentinel();
             ArrayNullException(data);
             foreach (var x in data)
             {
@@ -62,23 +60,34 @@ namespace DataStructures
         public void AddBefore(LinkedListNode<T> node, T item)
         {
             NullNodeException(node);
-            LinkedListNode<T> nextLink = node.Next;
-            LinkedListNode<T> previousLink = node.Previous;
-            GenericAdd(node, item, previousLink, nextLink);
+            GenericAddExceptions(item);
+            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
+
+            // linking nodes
+            node.Previous.Next = toAdd;
+            toAdd.Previous = node.Previous;
+            node.Previous = toAdd;
+            toAdd.Next = node;
+            Count++;
         }
 
         public void AddAfter(LinkedListNode<T> node, T item)
         {
             NullNodeException(node);
-            LinkedListNode<T> nextLink = node.Next;
-            LinkedListNode<T> previousLink = node.Previous;
-            GenericAdd(node, item, nextLink, previousLink);
+            GenericAddExceptions(item);
+            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
+
+            // linking nodes
+            node.Next.Previous = toAdd;
+            toAdd.Next = node.Next;
+            node.Next = toAdd;
+            toAdd.Previous = node;
+            Count++;
         }
 
         public void Clear()
         {
-            Sentinel.Previous = null;
-            Sentinel.Next = null;
+            Sentinel = null;
             Count = 0;
         }
 
@@ -118,10 +127,11 @@ namespace DataStructures
             ArrayNullException(array);
             NegativeIndexException(arrayIndex);
             ArgumentException(array, arrayIndex);
-            int index = -1;
+            int index = 0;
             for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
             {
-                array[index++] = current.Value;
+                array[index] = current.Value;
+                index++;
             }
         }
 
@@ -161,7 +171,7 @@ namespace DataStructures
         public void RemoveLast()
         {
             IsReadonlyException();
-            if (Sentinel.Next == Sentinel)
+            if (Sentinel.Previous == Sentinel)
             {
                 return;
             }
@@ -177,7 +187,7 @@ namespace DataStructures
         public void RemoveFirst()
         {
             IsReadonlyException();
-            if (Sentinel.Previous == Sentinel)
+            if (Sentinel.Next == Sentinel)
             {
                 return;
             }
@@ -203,20 +213,18 @@ namespace DataStructures
             return GetEnumerator();
         }
 
-        private void GenericAdd(LinkedListNode<T> node, T item, LinkedListNode<T> nextLink, LinkedListNode<T> previousLink)
+        private void GenericAddExceptions(T item)
         {
             IsReadonlyException();
             AlreadyInListException(item);
             NullItemException(item);
-            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
-            node.SetLinks(previousLink, nextLink);
+        }
 
-            // linking nodes
-            node.Next.Previous = toAdd;
-            toAdd.Next = node.Next;
-            node.Next = toAdd;
-            toAdd.Previous = node;
-            Count++;
+        private void CreateSentinel()
+        {
+            Sentinel = new LinkedListNode<T>(default);
+            Sentinel.Next = Sentinel;
+            Sentinel.Previous = Sentinel;
         }
 
         private void NullItemException(T item)

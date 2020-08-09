@@ -12,11 +12,5 @@
         public LinkedListNode<T> Next { get; set; }
 
         public LinkedListNode<T> Previous { get; set; }
-
-        public void SetLinks(LinkedListNode<T> previous, LinkedListNode<T> next)
-        {
-            Next = next;
-            Previous = previous;
-        }
     }
 }
