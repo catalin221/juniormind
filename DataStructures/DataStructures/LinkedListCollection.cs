@@ -85,8 +85,21 @@ namespace DataStructures
             Count++;
         }
 
+        public LinkedListCollection<T> ReadOnlyList()
+        {
+            LinkedListCollection<T> newList = new LinkedListCollection<T>();
+            foreach (var element in this)
+            {
+                newList.Add(element);
+            }
+
+            newList.MakeReadOnly = true;
+            return newList;
+        }
+
         public void Clear()
         {
+            IsReadonlyException();
             Sentinel = null;
             Count = 0;
         }
