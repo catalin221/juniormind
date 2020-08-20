@@ -6,14 +6,18 @@ namespace DataStructures
 {
     public class LinkedListCollection<T> : ICollection<T>
     {
+        private LinkedListNode<T> sentinel = new LinkedListNode<T>(default);
+
         public LinkedListCollection()
         {
-            CreateSentinel();
+            sentinel.Next = sentinel;
+            sentinel.Previous = sentinel;
         }
 
         public LinkedListCollection(T[] data)
         {
-            CreateSentinel();
+            sentinel.Next = sentinel;
+            sentinel.Previous = sentinel;
             ArrayNullException(data);
             foreach (var x in data)
             {
@@ -21,26 +25,44 @@ namespace DataStructures
             }
         }
 
-        public LinkedListNode<T> Sentinel { get; set; }
-
-        public int Count { get; private set;  }
+        public int Count { get; private set; }
 
         public bool IsReadOnly { get => MakeReadOnly; }
 
         public bool MakeReadOnly { get; protected set; }
 
-        public void Add(T item)
+        public LinkedListNode<T> GetFirst()
         {
-            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
-            Add(toAdd);
+            return sentinel.Next;
         }
 
-        public void Add(LinkedListNode<T> node)
+        public LinkedListNode<T> GetLast()
+        {
+            return sentinel.Previous;
+        }
+
+        public LinkedListNode<T> GetSentinel()
+        {
+            return sentinel;
+        }
+
+        public void Add(T item)
+        {
+            AddLast(item);
+        }
+
+        public void AddLast(T item)
+        {
+            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
+            AddLast(toAdd);
+        }
+
+        public void AddLast(LinkedListNode<T> node)
         {
             IsReadonlyException();
             NullNodeException(node);
             AlreadyInListException(node.Value);
-            AddBefore(Sentinel, node.Value);
+            AddBefore(sentinel, node.Value);
         }
 
         public void AddFirst(T item)
@@ -54,7 +76,7 @@ namespace DataStructures
             IsReadonlyException();
             NullNodeException(node);
             AlreadyInListException(node.Value);
-            AddAfter(Sentinel, node.Value);
+            AddAfter(sentinel, node.Value);
         }
 
         public void AddBefore(LinkedListNode<T> node, T item)
@@ -74,15 +96,7 @@ namespace DataStructures
         public void AddAfter(LinkedListNode<T> node, T item)
         {
             NullNodeException(node);
-            GenericAddExceptions(item);
-            LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
-
-            // linking nodes
-            node.Next.Previous = toAdd;
-            toAdd.Next = node.Next;
-            node.Next = toAdd;
-            toAdd.Previous = node;
-            Count++;
+            AddBefore(node.Next, item);
         }
 
         public LinkedListCollection<T> ReadOnlyList()
@@ -100,7 +114,7 @@ namespace DataStructures
         public void Clear()
         {
             IsReadonlyException();
-            Sentinel = null;
+            sentinel = null;
             Count = 0;
         }
 
@@ -111,7 +125,7 @@ namespace DataStructures
 
         public LinkedListNode<T> Find(T item)
         {
-           for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
+           for (LinkedListNode<T> current = sentinel.Next; current != sentinel; current = current.Next)
             {
                 if (current.Value.Equals(item))
                 {
@@ -124,7 +138,7 @@ namespace DataStructures
 
         public LinkedListNode<T> FindLast(T item)
         {
-            for (LinkedListNode<T> current = Sentinel.Previous; current != Sentinel; current = current.Previous)
+            for (LinkedListNode<T> current = sentinel.Previous; current != sentinel; current = current.Previous)
             {
                 if (current.Value.Equals(item))
                 {
@@ -141,7 +155,7 @@ namespace DataStructures
             NegativeIndexException(arrayIndex);
             ArgumentException(array, arrayIndex);
             int index = 0;
-            for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
+            for (LinkedListNode<T> current = sentinel.Next; current != sentinel; current = current.Next)
             {
                 array[index] = current.Value;
                 index++;
@@ -151,11 +165,11 @@ namespace DataStructures
         public bool Remove(T item)
         {
             IsReadonlyException();
-            for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
+            for (LinkedListNode<T> current = sentinel.Next; current != sentinel; current = current.Next)
             {
                 if (current.Value.Equals(item))
                 {
-                    if (current.Next == Sentinel)
+                    if (current.Next == sentinel)
                     {
                         RemoveLast();
                     }
@@ -164,7 +178,7 @@ namespace DataStructures
                         current.Next.Previous = current.Previous;
                     }
 
-                    if (current.Previous == Sentinel)
+                    if (current.Previous == sentinel)
                     {
                         RemoveFirst();
                     }
@@ -184,38 +198,38 @@ namespace DataStructures
         public void RemoveLast()
         {
             IsReadonlyException();
-            if (Sentinel.Previous == Sentinel)
+            if (sentinel.Previous == sentinel)
             {
                 return;
             }
 
-            LinkedListNode<T> last = Sentinel.Previous;
+            LinkedListNode<T> last = sentinel.Previous;
             last = last.Previous;
             last.Next = null;
-            last.Next = Sentinel;
-            Sentinel.Previous = last;
+            last.Next = sentinel;
+            sentinel.Previous = last;
             Count--;
         }
 
         public void RemoveFirst()
         {
             IsReadonlyException();
-            if (Sentinel.Next == Sentinel)
+            if (sentinel.Next == sentinel)
             {
                 return;
             }
 
-            LinkedListNode<T> first = Sentinel.Next;
+            LinkedListNode<T> first = sentinel.Next;
             first = first.Next;
             first.Previous = null;
-            first.Previous = Sentinel;
-            Sentinel.Next = first;
+            first.Previous = sentinel;
+            sentinel.Next = first;
             Count--;
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            for (LinkedListNode<T> current = Sentinel.Next; current != Sentinel; current = current.Next)
+            for (LinkedListNode<T> current = sentinel.Next; current != sentinel; current = current.Next)
             {
                 yield return current.Value;
             }
@@ -231,13 +245,6 @@ namespace DataStructures
             IsReadonlyException();
             AlreadyInListException(item);
             NullItemException(item);
-        }
-
-        private void CreateSentinel()
-        {
-            Sentinel = new LinkedListNode<T>(default);
-            Sentinel.Next = Sentinel;
-            Sentinel.Previous = Sentinel;
         }
 
         private void NullItemException(T item)

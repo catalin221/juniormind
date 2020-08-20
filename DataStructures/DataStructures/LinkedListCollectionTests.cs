@@ -8,8 +8,8 @@ namespace DataStructures
         public void ValidateImplicitConstructor()
         {
             var list = new LinkedListCollection<int>();
-            Assert.Equal(list.Sentinel, list.Sentinel.Next);
-            Assert.Equal(list.Sentinel, list.Sentinel.Previous);
+            Assert.Equal(list.GetSentinel(), list.GetFirst());
+            Assert.Equal(list.GetSentinel(), list.GetLast());
         }
 
         [Fact]
@@ -17,9 +17,9 @@ namespace DataStructures
         {
             int[] array = new[] { 1, 2, 3, 4 };
             var list = new LinkedListCollection<int>(array);
-            Assert.Equal(1, list.Sentinel.Next.Value);
-            Assert.Equal(4, list.Sentinel.Previous.Value);
-            LinkedListNode<int> current = list.Sentinel.Next;
+            Assert.Equal(1, list.GetFirst().Value);
+            Assert.Equal(4, list.GetLast().Value);
+            LinkedListNode<int> current = list.GetFirst();
             foreach (int digit in array)
             {
                 Assert.Equal(digit, current.Value);
@@ -32,7 +32,7 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>();
             list.Add(2);
-            Assert.Equal(2, list.Sentinel.Next.Value);
+            Assert.Equal(2, list.GetFirst().Value);
         }
 
         [Fact]
@@ -40,7 +40,23 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
             list.Add(4);
-            Assert.Equal(4, list.Sentinel.Previous.Value);
+            Assert.Equal(4, list.GetLast().Value);
+        }
+
+        [Fact]
+        public void ValidatesAddBeforeMethod()
+        {
+            var list = new LinkedListCollection<int>(new[] { 1, 2, 4 });
+            list.AddBefore(list.GetLast(), 3);
+            Assert.Equal(3, list.GetLast().Previous.Value);
+        }
+
+        [Fact]
+        public void ValidatesAddAfterMethod()
+        {
+            var list = new LinkedListCollection<int>(new[] { 1, 3, 4 });
+            list.AddAfter(list.GetFirst(), 2);
+            Assert.Equal(2, list.GetFirst().Next.Value);
         }
 
         [Fact]
@@ -48,7 +64,7 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>();
             list.AddFirst(4);
-            Assert.Equal(4, list.Sentinel.Next.Value);
+            Assert.Equal(4, list.GetFirst().Value);
         }
 
         [Fact]
@@ -56,7 +72,7 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
             list.AddFirst(4);
-            Assert.Equal(4, list.Sentinel.Next.Value);
+            Assert.Equal(4, list.GetFirst().Value);
         }
 
         [Fact]
@@ -64,7 +80,7 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
             list.RemoveFirst();
-            Assert.Equal(2, list.Sentinel.Next.Value);
+            Assert.Equal(2, list.GetFirst().Value);
         }
 
         [Fact]
@@ -72,7 +88,7 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
             list.RemoveLast();
-            Assert.Equal(2, list.Sentinel.Previous.Value);
+            Assert.Equal(2, list.GetLast().Value);
         }
 
         [Fact]
@@ -81,8 +97,8 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
             Assert.True(list.Remove(2));
-            Assert.Equal(1, list.Sentinel.Next.Value);
-            Assert.Equal(3, list.Sentinel.Previous.Value);
+            Assert.Equal(1, list.GetFirst().Value);
+            Assert.Equal(3, list.GetLast().Value);
         }
 
         [Fact]
@@ -90,7 +106,7 @@ namespace DataStructures
         public void ValidatesFindFirstMethod()
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
-            Assert.Equal(list.Sentinel.Next, list.Find(1));
+            Assert.Equal(list.GetFirst(), list.Find(1));
         }
 
         [Fact]
@@ -98,7 +114,7 @@ namespace DataStructures
         public void ValidatesFindLastMethod()
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3, 4, 5 });
-            Assert.Equal(list.Sentinel.Previous.Previous, list.Find(4));
+            Assert.Equal(list.GetLast().Previous, list.Find(4));
         }
 
         [Fact]
@@ -115,7 +131,7 @@ namespace DataStructures
         {
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
             list.Clear();
-            Assert.Null(list.Sentinel);
+            Assert.Null(list.GetSentinel());
             Assert.Equal(0, list.Count);
         }
 
@@ -126,7 +142,7 @@ namespace DataStructures
             var list = new LinkedListCollection<int>(new[] { 1, 2, 3 });
             var array = new int[3];
             list.CopyTo(array, 0);
-            LinkedListNode<int> node = list.Sentinel.Next;
+            LinkedListNode<int> node = list.GetFirst();
             foreach (var x in array)
             {
                 Assert.Equal(x, node.Value);
