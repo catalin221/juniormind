@@ -51,8 +51,14 @@ namespace DataStructures
             AddLast(item);
         }
 
+        public void Add(LinkedListNode<T> item)
+        {
+            AddLast(item);
+        }
+
         public void AddLast(T item)
         {
+            AlreadyInListException(item);
             LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
             AddLast(toAdd);
         }
@@ -61,12 +67,12 @@ namespace DataStructures
         {
             IsReadonlyException();
             NullNodeException(node);
-            AlreadyInListException(node.Value);
-            AddBefore(sentinel, node.Value);
+            AddBefore(sentinel, node);
         }
 
         public void AddFirst(T item)
         {
+            AlreadyInListException(item);
             LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
             AddFirst(toAdd);
         }
@@ -75,28 +81,39 @@ namespace DataStructures
         {
             IsReadonlyException();
             NullNodeException(node);
-            AlreadyInListException(node.Value);
-            AddAfter(sentinel, node.Value);
+            AddAfter(sentinel, node);
+        }
+
+        public void AddAfter(LinkedListNode<T> node, T item)
+        {
+            GenericAddExceptions(item);
+            NullNodeException(node);
+            AddBefore(node.Next, item);
+        }
+
+        public void AddAfter(LinkedListNode<T> node, LinkedListNode<T> toAdd)
+        {
+            NullNodeException(node);
+            AddBefore(node.Next, toAdd);
         }
 
         public void AddBefore(LinkedListNode<T> node, T item)
         {
+            AlreadyInListException(item);
             NullNodeException(node);
             GenericAddExceptions(item);
             LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
+        }
 
-            // linking nodes
+        public void AddBefore(LinkedListNode<T> node, LinkedListNode<T> toAdd)
+        {
+            NullNodeException(toAdd);
+            NullNodeException(node);
             node.Previous.Next = toAdd;
             toAdd.Previous = node.Previous;
             node.Previous = toAdd;
             toAdd.Next = node;
             Count++;
-        }
-
-        public void AddAfter(LinkedListNode<T> node, T item)
-        {
-            NullNodeException(node);
-            AddBefore(node.Next, item);
         }
 
         public LinkedListCollection<T> ReadOnlyList()

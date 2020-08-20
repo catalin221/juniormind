@@ -27,7 +27,7 @@ namespace DataStructures
         {
             var test = new LinkedListCollection<int> { 1, 2 };
             LinkedListNode<int> testNode = null;
-            Assert.Throws<ArgumentNullException>(() => test.Add(testNode));
+            Assert.Throws<ArgumentNullException>(() => test.AddLast(testNode));
         }
 
         [Fact]
@@ -35,7 +35,7 @@ namespace DataStructures
         {
             var test = new LinkedListCollection<int?> { 1, 2 };
             int? testNode = null;
-            Assert.Throws<ArgumentNullException>(() => test.Add(testNode));
+            Assert.Throws<ArgumentNullException>(() => test.AddLast(testNode));
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace DataStructures
         {
             var test = new LinkedListCollection<int?> { 1, 2 };
             const int testNode = 2;
-            Assert.Throws<InvalidOperationException>(() => test.Add(testNode));
+            Assert.Throws<InvalidOperationException>(() => test.AddLast(testNode));
         }
 
         [Fact]
