@@ -39,22 +39,6 @@ namespace DataStructures
         }
 
         [Fact]
-        public void AlreadyInListAddMethodException()
-        {
-            var test = new LinkedListCollection<int?> { 1, 2 };
-            const int testNode = 2;
-            Assert.Throws<InvalidOperationException>(() => test.AddLast(testNode));
-        }
-
-        [Fact]
-        public void AlreadyInListAddFirstMethodException()
-        {
-            var test = new LinkedListCollection<int?> { 1, 2 };
-            const int testNode = 2;
-            Assert.Throws<InvalidOperationException>(() => test.AddFirst(testNode));
-        }
-
-        [Fact]
         public void NullItemAddFirstMethodException()
         {
             var test = new LinkedListCollection<int?> { 1, 2 };
@@ -119,6 +103,14 @@ namespace DataStructures
             test.Add(2);
             test = test.ReadOnlyList();
             Assert.Throws<NotSupportedException>(() => test.Remove(2));
+        }
+
+        [Fact]
+        public void ArgumentNullRemoveMethodException()
+        {
+            var test = new LinkedListCollection<int> { 1, 2 };
+            LinkedListNode<int> nullNode = null;
+            Assert.Throws<ArgumentNullException>(() => test.Remove(nullNode));
         }
 
         [Fact]

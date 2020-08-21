@@ -31,19 +31,22 @@ namespace DataStructures
 
         public bool MakeReadOnly { get; protected set; }
 
-        public LinkedListNode<T> GetFirst()
+        public LinkedListNode<T> GetFirst
         {
-            return sentinel.Next;
+            get
+            {
+                EmptyListException();
+                return sentinel.Next;
+            }
         }
 
-        public LinkedListNode<T> GetLast()
+        public LinkedListNode<T> GetLast
         {
-            return sentinel.Previous;
-        }
-
-        public LinkedListNode<T> GetSentinel()
-        {
-            return sentinel;
+            get
+            {
+                EmptyListException();
+                return sentinel.Previous;
+            }
         }
 
         public void Add(T item)
@@ -58,7 +61,7 @@ namespace DataStructures
 
         public void AddLast(T item)
         {
-            AlreadyInListException(item);
+            NullItemException(item);
             LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
             AddLast(toAdd);
         }
@@ -66,13 +69,12 @@ namespace DataStructures
         public void AddLast(LinkedListNode<T> node)
         {
             IsReadonlyException();
-            NullNodeException(node);
             AddBefore(sentinel, node);
         }
 
         public void AddFirst(T item)
         {
-            AlreadyInListException(item);
+            NullItemException(item);
             LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
             AddFirst(toAdd);
         }
@@ -80,29 +82,26 @@ namespace DataStructures
         public void AddFirst(LinkedListNode<T> node)
         {
             IsReadonlyException();
-            NullNodeException(node);
             AddAfter(sentinel, node);
         }
 
         public void AddAfter(LinkedListNode<T> node, T item)
         {
             GenericAddExceptions(item);
-            NullNodeException(node);
-            AddBefore(node.Next, item);
+            AddBefore(node?.Next, item);
         }
 
         public void AddAfter(LinkedListNode<T> node, LinkedListNode<T> toAdd)
         {
-            NullNodeException(node);
-            AddBefore(node.Next, toAdd);
+            AddBefore(node?.Next, toAdd);
         }
 
         public void AddBefore(LinkedListNode<T> node, T item)
         {
-            AlreadyInListException(item);
             NullNodeException(node);
             GenericAddExceptions(item);
             LinkedListNode<T> toAdd = new LinkedListNode<T>(item);
+            AddBefore(node, toAdd);
         }
 
         public void AddBefore(LinkedListNode<T> node, LinkedListNode<T> toAdd)
@@ -179,47 +178,47 @@ namespace DataStructures
             }
         }
 
+        public bool Remove(LinkedListNode<T> item)
+        {
+            NullNodeException(item);
+            if (item.Next == sentinel)
+            {
+                RemoveLast();
+            }
+            else
+            {
+                item.Next.Previous = item.Previous;
+            }
+
+            if (item.Previous == sentinel)
+            {
+                RemoveFirst();
+            }
+            else
+            {
+                item.Previous.Next = item.Next;
+            }
+
+            Count--;
+            return true;
+        }
+
         public bool Remove(T item)
         {
             IsReadonlyException();
-            for (LinkedListNode<T> current = sentinel.Next; current != sentinel; current = current.Next)
+            LinkedListNode<T> toRemove = Find(item);
+            if (toRemove == null)
             {
-                if (current.Value.Equals(item))
-                {
-                    if (current.Next == sentinel)
-                    {
-                        RemoveLast();
-                    }
-                    else
-                    {
-                        current.Next.Previous = current.Previous;
-                    }
-
-                    if (current.Previous == sentinel)
-                    {
-                        RemoveFirst();
-                    }
-                    else
-                    {
-                        current.Previous.Next = current.Next;
-                    }
-
-                    Count--;
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            return Remove(toRemove);
         }
 
         public void RemoveLast()
         {
             IsReadonlyException();
-            if (sentinel.Previous == sentinel)
-            {
-                return;
-            }
-
+            EmptyListException();
             LinkedListNode<T> last = sentinel.Previous;
             last = last.Previous;
             last.Next = null;
@@ -231,11 +230,7 @@ namespace DataStructures
         public void RemoveFirst()
         {
             IsReadonlyException();
-            if (sentinel.Next == sentinel)
-            {
-                return;
-            }
-
+            EmptyListException();
             LinkedListNode<T> first = sentinel.Next;
             first = first.Next;
             first.Previous = null;
@@ -260,8 +255,17 @@ namespace DataStructures
         private void GenericAddExceptions(T item)
         {
             IsReadonlyException();
-            AlreadyInListException(item);
             NullItemException(item);
+        }
+
+        private void EmptyListException()
+        {
+            if (Count != 0)
+            {
+                return;
+            }
+
+            throw new InvalidOperationException();
         }
 
         private void NullItemException(T item)
