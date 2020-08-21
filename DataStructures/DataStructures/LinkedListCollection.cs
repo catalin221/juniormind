@@ -318,16 +318,6 @@ namespace DataStructures
             throw new ArgumentNullException("array");
         }
 
-        private void AlreadyInListException(T item)
-        {
-            if (!Contains(item))
-            {
-                return;
-            }
-
-            throw new InvalidOperationException("item");
-        }
-
         private void IsReadonlyException()
         {
             if (!IsReadOnly)
