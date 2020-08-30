@@ -12,5 +12,7 @@
         public LinkedListNode<T> Next { get; set; }
 
         public LinkedListNode<T> Previous { get; set; }
+
+        public LinkedListCollection<T> List { get; internal set; }
     }
 }

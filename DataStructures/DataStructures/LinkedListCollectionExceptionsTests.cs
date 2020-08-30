@@ -122,5 +122,24 @@ namespace DataStructures
             test = test.ReadOnlyList();
             Assert.Throws<NotSupportedException>(() => test.Clear());
         }
+
+        [Fact]
+        public void RemoveMethodInvalidOperationException()
+        {
+            var test = new LinkedListCollection<int> { 1, 2 };
+            var secondTestList = new LinkedListCollection<int> { 1, 2 };
+            LinkedListNode<int> node = new LinkedListNode<int>(3);
+            secondTestList.Add(node);
+            Assert.Throws<InvalidOperationException>(() => test.Remove(node));
+        }
+
+        [Fact]
+        public void AddMethodInvalidOperationException()
+        {
+            var test = new LinkedListCollection<int> { 1, 2 };
+            LinkedListNode<int> node = new LinkedListNode<int>(2);
+            test.Add(node);
+            Assert.Throws<InvalidOperationException>(() => test.Add(node));
+        }
     }
 }

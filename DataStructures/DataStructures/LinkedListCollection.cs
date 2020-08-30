@@ -6,7 +6,7 @@ namespace DataStructures
 {
     public class LinkedListCollection<T> : ICollection<T>
     {
-        private LinkedListNode<T> sentinel = new LinkedListNode<T>(default);
+        private readonly LinkedListNode<T> sentinel = new LinkedListNode<T>(default);
 
         public LinkedListCollection()
         {
@@ -108,10 +108,12 @@ namespace DataStructures
         {
             NullNodeException(toAdd);
             NullNodeException(node);
+            NodeBelongsToCurrentListException(toAdd);
             node.Previous.Next = toAdd;
             toAdd.Previous = node.Previous;
             node.Previous = toAdd;
             toAdd.Next = node;
+            toAdd.List = this;
             Count++;
         }
 
@@ -130,7 +132,8 @@ namespace DataStructures
         public void Clear()
         {
             IsReadonlyException();
-            sentinel = null;
+            sentinel.Next = sentinel;
+            sentinel.Previous = sentinel;
             Count = 0;
         }
 
@@ -181,14 +184,8 @@ namespace DataStructures
         public bool Remove(LinkedListNode<T> item)
         {
             NullNodeException(item);
-            if (item.Next == sentinel)
-            {
-                RemoveLast();
-            }
-            else
-            {
-                item.Next.Previous = item.Previous;
-            }
+            NodeBelongsToAnotherListException(item);
+            item.Next.Previous = item.Previous;
 
             if (item.Previous == sentinel)
             {
@@ -256,6 +253,26 @@ namespace DataStructures
         {
             IsReadonlyException();
             NullItemException(item);
+        }
+
+        private void NodeBelongsToCurrentListException(LinkedListNode<T> node)
+        {
+            if (node.List != this)
+            {
+                return;
+            }
+
+            throw new InvalidOperationException();
+        }
+
+        private void NodeBelongsToAnotherListException(LinkedListNode<T> node)
+        {
+            if (node.List == this && node.List != null)
+            {
+                return;
+            }
+
+            throw new InvalidOperationException();
         }
 
         private void EmptyListException()
