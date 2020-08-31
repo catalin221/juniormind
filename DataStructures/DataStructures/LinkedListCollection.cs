@@ -186,16 +186,7 @@ namespace DataStructures
             NullNodeException(item);
             NodeBelongsToAnotherListException(item);
             item.Next.Previous = item.Previous;
-
-            if (item.Previous == sentinel)
-            {
-                RemoveFirst();
-            }
-            else
-            {
-                item.Previous.Next = item.Next;
-            }
-
+            item.Previous.Next = item.Next;
             Count--;
             return true;
         }
@@ -216,24 +207,14 @@ namespace DataStructures
         {
             IsReadonlyException();
             EmptyListException();
-            LinkedListNode<T> last = sentinel.Previous;
-            last = last.Previous;
-            last.Next = null;
-            last.Next = sentinel;
-            sentinel.Previous = last;
-            Count--;
+            Remove(sentinel.Previous);
         }
 
         public void RemoveFirst()
         {
             IsReadonlyException();
             EmptyListException();
-            LinkedListNode<T> first = sentinel.Next;
-            first = first.Next;
-            first.Previous = null;
-            first.Previous = sentinel;
-            sentinel.Next = first;
-            Count--;
+            Remove(sentinel.Next);
         }
 
         public IEnumerator<T> GetEnumerator()
