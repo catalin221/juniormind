@@ -7,8 +7,8 @@ namespace DataStructures
         [Fact]
         public void IterationTest()
         {
-            var testArray = new List<int> { 1, 2, 3, 4 };
-            var cloneTestArray = new List<int>();
+            var testArray = new ListCollection<int> { 1, 2, 3, 4 };
+            var cloneTestArray = new ListCollection<int>();
             foreach (var obj in testArray)
             {
                 cloneTestArray.Add(obj);

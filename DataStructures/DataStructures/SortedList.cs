@@ -2,7 +2,7 @@
 
 namespace DataStructures
 {
-    class SortedList<T> : List<T>
+    class SortedList<T> : ListCollection<T>
         where T : IComparable<T>
     {
         public SortedList() : base()

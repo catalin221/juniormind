@@ -7,7 +7,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesConstructor()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             Assert.Empty(test);
             Assert.Equal(0, test[0]);
             Assert.Equal(0, test[1]);
@@ -18,7 +18,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesAddMethod()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(1);
             test.Add(2);
             test.Add(3);
@@ -34,7 +34,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesCountMethod()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test.Add(3);
             test.Add(2);
@@ -46,7 +46,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesSetElementMethod()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test[0] = 6;
             Assert.Equal(6, test[0]);
@@ -55,7 +55,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesContainMethodAndFindsElement()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(1);
             test.Add(3);
             Assert.Contains(1, test);
@@ -64,7 +64,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesContainMethodAndDoesNotFindElement()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(1);
             test.Add(3);
             Assert.DoesNotContain(2, test);
@@ -73,7 +73,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesIndexOfMethodAndReturnsIndex()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test.Add(3);
             Assert.Equal(1, test.IndexOf(3));
@@ -82,7 +82,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesIndexOfMethodAndDoesNotReturnIndex()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test.Add(4);
             Assert.Equal(-1, test.IndexOf(1000));
@@ -91,7 +91,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesInsertMethod()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test.Add(3);
             test.Insert(0, 1);
@@ -104,7 +104,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesClearMethod()
         {
-            var test = new List<int> { 5, 3 };
+            var test = new ListCollection<int> { 5, 3 };
 
             test.Clear();
             Assert.Empty(test);
@@ -113,7 +113,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesRemoveMethod()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test.Add(3);
             test.Remove(5);
@@ -123,7 +123,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesRemoveAtMethod()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test.Add(3);
             test.RemoveAt(0);
@@ -133,7 +133,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesIListRemoveMethodAndDoesNotFindElement()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test.Add(6);
             test.Add(4);
@@ -144,7 +144,7 @@ namespace DataStructures
         [Fact]
         public void ValidatesIListRemoveMethod()
         {
-            var test = new List<int>();
+            var test = new ListCollection<int>();
             test.Add(5);
             test.Add(6);
             test.Add(4);
