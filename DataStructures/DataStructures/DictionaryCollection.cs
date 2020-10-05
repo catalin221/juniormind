@@ -16,11 +16,7 @@ namespace DataStructures
         public DictionaryCollection(int dimension)
         {
             buckets = new int[dimension];
-            for (int i = 0; i < dimension; i++)
-            {
-                buckets[i] = -1;
-            }
-
+            Array.Fill(buckets, -1);
             elements = new Element<TKey, TValue>[dimension];
         }
 
@@ -29,9 +25,9 @@ namespace DataStructures
             get
             {
                 List<TKey> keys = new List<TKey>();
-                for (int i = 0; i < Count; i++)
+                foreach (var element in this)
                 {
-                    keys.Add(elements[i].Key);
+                    keys.Add(element.Key);
                 }
 
                 return keys;
@@ -43,9 +39,9 @@ namespace DataStructures
             get
             {
                 List<TValue> values = new List<TValue>();
-                for (int i = 0; i < Count; i++)
+                foreach (var element in this)
                 {
-                    values.Add(elements[i].Value);
+                    values.Add(element.Value);
                 }
 
                 return values;
@@ -63,15 +59,28 @@ namespace DataStructures
             get
             {
                 NullKeyException(key);
-                KeyNotFoundException(key);
-                return this.elements[FindKeyPosition(key)].Value;
+                int index = FindKeyPosition(key);
+                if (index == -1)
+                {
+                    KeyNotFoundException(key);
+                }
+
+                return this.elements[index].Value;
             }
 
             set
             {
                 IsReadonlyException();
                 NullKeyException(key);
-                this.elements[FindKeyPosition(key)].Value = value;
+                int index = FindKeyPosition(key);
+                if (index == -1)
+                {
+                    Add(key, value);
+                }
+                else
+                {
+                    this.elements[index].Value = value;
+                }
             }
         }
 
@@ -128,11 +137,14 @@ namespace DataStructures
 
         public IEnumerator<KeyValuePair<TKey, TValue>> GetEnumerator()
         {
-            KeyValuePair<TKey, TValue> pair;
-            for (int i = 0; i < Count; i++)
+            for (int bucket = 0; bucket < buckets.Length; bucket++)
             {
-                pair = new KeyValuePair<TKey, TValue>(elements[i].Key, elements[i].Value);
-                yield return pair;
+                for (int elementIndex = buckets[bucket]; elementIndex != -1; elementIndex = elements[elementIndex].Next)
+                {
+                    yield return new KeyValuePair<TKey, TValue>(
+                        elements[elementIndex].Key,
+                        elements[elementIndex].Value);
+                }
             }
         }
 
