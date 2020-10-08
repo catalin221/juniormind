@@ -33,28 +33,15 @@ namespace ExtensionMethods
 
         public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            TSource foundElement = default;
-            bool found = false;
             foreach (var element in source)
             {
                 if (predicate(element))
                 {
-                    foundElement = element;
-                    found = true;
-                }
-
-                if (found)
-                {
-                    break;
+                    return element;
                 }
             }
 
-            if (!found)
-            {
-                throw new InvalidOperationException();
-            }
-
-            return foundElement;
+            throw new InvalidOperationException();
         }
     }
 }
