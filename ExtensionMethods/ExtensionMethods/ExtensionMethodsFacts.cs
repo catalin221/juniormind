@@ -47,5 +47,36 @@ namespace ExtensionMethods
             List<int> testList = new List<int> { 2, 2, 4, 7 };
             Assert.Equal(7, testList.First(element => element % 2 == 1));
         }
+
+        [Fact]
+        public void Select_Method_Square_Elements()
+        {
+            List<int> testList = new List<int> { 2, 3, 4, 5 };
+            IEnumerable<int> squareList = new List<int> { 4, 9, 16, 25 };
+            IEnumerable<int> resultList = testList.Select(element => element * element);
+            Assert.Equal(squareList, resultList);
+        }
+
+        [Fact]
+        public void SelectMany_Method_Returns_All_Items_To_Lower()
+        {
+            List<string> names = new List<string>(new [] { "John", "Alan", "Greg" });
+            IEnumerable<string> resultList = names.SelectMany(element => new List<string> { element.ToLower()});
+            Assert.Equal(new[] { "john", "alan", "greg" }, resultList);
+        }
+
+        [Fact]
+        public void Where_Method_Returns_Numbers_With_Specific_Digit()
+        {
+            List<int> number = new List<int>() { 23, 47, 52, 26 };
+            Assert.Equal(new List<int> { 23, 52, 26 }, number.Where(element => element.ToString().Contains('2')));
+        }
+
+        [Fact]
+        public void Where_Method_Returns_No_Numbers_With_Specific_Digit()
+        {
+            List<int> number = new List<int>() { 23, 47, 52, 26 };
+            Assert.Equal(new List<int> { }, number.Where(element => element.ToString().Contains('8')));
+        }
     }
 }
