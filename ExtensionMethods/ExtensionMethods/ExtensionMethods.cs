@@ -47,27 +47,21 @@ namespace ExtensionMethods
 
         public static IEnumerable<TResult> Select<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
         {
-            List<TResult> result = new List<TResult>();
             foreach (var element in source)
             {
-                result.Add(selector(element));
+                yield return selector(element);
             }
-
-            return result;
         }
 
         public static IEnumerable<TResult> SelectMany<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
         {
-            List<TResult> resultList = new List<TResult>();
             foreach (var item in source)
             {
                 foreach(var result in selector(item))
                 {
-                    resultList.Add(result);
+                    yield return result;
                 }
             }
-
-            return resultList;
         }
 
         public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
@@ -79,6 +73,20 @@ namespace ExtensionMethods
                     yield return element;
                 }
             }
+        }
+
+        public static Dictionary<TKey, TElement> ToDictionary<TSource, TKey, TElement>(
+                    this IEnumerable<TSource> source,
+                    Func<TSource, TKey> keySelector,
+                    Func<TSource, TElement> elementSelector)
+        {
+            Dictionary<TKey, TElement> dictionary = new Dictionary<TKey, TElement>();
+            foreach (var element in source)
+            {
+                dictionary.Add(keySelector(element), elementSelector(element));
+            }
+
+            return dictionary;
         }
 
     }

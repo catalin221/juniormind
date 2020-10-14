@@ -78,5 +78,13 @@ namespace ExtensionMethods
             List<int> number = new List<int>() { 23, 47, 52, 26 };
             Assert.Equal(new List<int> { }, number.Where(element => element.ToString().Contains('8')));
         }
+
+        [Fact]
+        public void ToDictionary_Key_Is_Value_ToString()
+        {
+            List<int> number = new List<int>() { 23, 47, 52, 26 };
+            Dictionary<string, int> dictionaryTest = number.ToDictionary(element => element.ToString(), element => element);
+            Assert.Equal(new Dictionary<string, int>() { { "23", 23 }, { "47", 47 }, { "52", 52 }, { "26", 26 } }, dictionaryTest);
+        }
     }
 }
