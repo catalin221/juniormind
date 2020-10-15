@@ -89,5 +89,33 @@ namespace ExtensionMethods
             return dictionary;
         }
 
+        public static IEnumerable<TResult> Zip<TFirst, TSecond, TResult>(
+                    this IEnumerable<TFirst> first,
+                    IEnumerable<TSecond> second,
+                    Func<TFirst, TSecond, TResult> resultSelector)
+        {
+            var firstElement = first.GetEnumerator();
+            var secondElement = second.GetEnumerator();
+
+            while (firstElement.MoveNext() && secondElement.MoveNext())
+            {
+                yield return resultSelector(firstElement.Current, secondElement.Current);
+            }
+        }
+
+        public static TAccumulate Aggregate<TSource, TAccumulate>(
+                    this IEnumerable<TSource> source,
+                    TAccumulate seed,
+                    Func<TAccumulate, TSource, TAccumulate> func)
+        {
+            TAccumulate result = seed;
+            foreach (var element in source)
+            {
+                result = func(result, element);
+            }
+
+            return result;
+        }
+
     }
 }

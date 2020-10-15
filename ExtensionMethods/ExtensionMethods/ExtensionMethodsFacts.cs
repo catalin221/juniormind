@@ -86,5 +86,20 @@ namespace ExtensionMethods
             Dictionary<string, int> dictionaryTest = number.ToDictionary(element => element.ToString(), element => element);
             Assert.Equal(new Dictionary<string, int>() { { "23", 23 }, { "47", 47 }, { "52", 52 }, { "26", 26 } }, dictionaryTest);
         }
+
+        [Fact]
+        public void Zip_Returns_List_With_Product_Of_Integer_Lists()
+        {
+            List<int> firstList = new List<int>() { 2, 4, 5 };
+            List<int> secondList = new List<int>() { 1, 2, 3 };
+            Assert.Equal(new List<int> {2, 8, 15 }, firstList.Zip(secondList, (first, second) => first * second));
+        }
+
+        [Fact]
+        public void Aggregate_Returns_Number_Of_Elements_With_Specific_Digit()
+        {
+            List<int> number = new List<int>() { 23, 47, 52, 26 };
+            Assert.Equal(3, number.Aggregate(0, (total, element) => element.ToString().Contains('2') ? total + 1 : total));
+        }
     }
 }
