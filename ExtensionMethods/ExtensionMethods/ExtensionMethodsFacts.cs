@@ -1,11 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
+using ExtensionMethods;
 using Xunit;
 
 namespace ExtensionMethods
 {
     public class ExtensionMethodsFacts
     {
+        public class ItemComparer<T> : IEqualityComparer<T>
+        {
+            public bool Equals(T firstItem, T secondItem)
+            {
+                if (firstItem == null && secondItem == null)
+                    return true;
+                else if (firstItem == null || secondItem == null)
+                    return false;
+                else if (firstItem.Equals(secondItem))
+                    return true;
+                else
+                    return false;
+            }
+
+            public int GetHashCode(T item)
+            {
+                return item.GetHashCode();
+            }
+        }
         [Fact]
         public void All_Method_Returns_True_Odd_Elements_Test()
         {
@@ -60,8 +81,8 @@ namespace ExtensionMethods
         [Fact]
         public void SelectMany_Method_Returns_All_Items_To_Lower()
         {
-            List<string> names = new List<string>(new [] { "John", "Alan", "Greg" });
-            IEnumerable<string> resultList = names.SelectMany(element => new List<string> { element.ToLower()});
+            List<string> names = new List<string>(new[] { "John", "Alan", "Greg" });
+            IEnumerable<string> resultList = names.SelectMany(element => new List<string> { element.ToLower() });
             Assert.Equal(new[] { "john", "alan", "greg" }, resultList);
         }
 
@@ -92,7 +113,7 @@ namespace ExtensionMethods
         {
             List<int> firstList = new List<int>() { 2, 4, 5 };
             List<int> secondList = new List<int>() { 1, 2, 3 };
-            Assert.Equal(new List<int> {2, 8, 15 }, firstList.Zip(secondList, (first, second) => first * second));
+            Assert.Equal(new List<int> { 2, 8, 15 }, firstList.Zip(secondList, (first, second) => first * second));
         }
 
         [Fact]
@@ -100,6 +121,35 @@ namespace ExtensionMethods
         {
             List<int> number = new List<int>() { 23, 47, 52, 26 };
             Assert.Equal(3, number.Aggregate(0, (total, element) => element.ToString().Contains('2') ? total + 1 : total));
+        }
+
+        [Fact]
+        public void Join_Returns_Common_Letters()
+        {
+            const string firstWord = "Inna";
+            const string secondWord = "Ana";
+            var result = firstWord.Join(secondWord,
+                                      firstLetters => firstLetters,
+                                      secondLetters => secondLetters,
+                                      (firstLetters, secondLetters) => firstLetters);
+            Assert.Equal("nna", result);
+
+
+        }
+
+        [Fact]
+        public void Distinct_Returns_Distinct_Digits()
+        {
+            int[] array = { 1, 2, 2, 3, 3, 4, 5 };
+            Assert.Equal(new[] { 1, 2, 3, 4, 5}, array.Distinct(new ItemComparer<int>()));
+        }
+
+        [Fact]
+        public void Union_Of_Integer_Arrays_Returns_Union()
+        {
+            int[] firstArray = { 5, 3, 9, 7, 5, 9, 3, 7 };
+            int[] secondArray = { 8, 3, 6, 4, 4, 9, 1, 0 };
+            Assert.Equal(new[] { 5, 3, 9, 7, 8, 6, 4, 1, 0 }, firstArray.Union(secondArray, new ItemComparer<int>()));
         }
     }
 }

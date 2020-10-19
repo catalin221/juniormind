@@ -6,6 +6,8 @@ namespace ExtensionMethods
 {
     public static class Program
     {
+
+
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
             foreach (var element in source)
@@ -115,6 +117,65 @@ namespace ExtensionMethods
             }
 
             return result;
+        }
+
+        public static IEnumerable<TResult> Join<TOuter, TInner, TKey, TResult>(
+                    this IEnumerable<TOuter> outer,
+                    IEnumerable<TInner> inner,
+                    Func<TOuter, TKey> outerKeySelector,
+                    Func<TInner, TKey> innerKeySelector,
+                    Func<TOuter, TInner, TResult> resultSelector)
+        {
+            foreach (var element in outer)
+            {
+                foreach (var innerElement in inner)
+                {
+                    if (innerKeySelector(innerElement).Equals(outerKeySelector(element)))
+                    {
+                        yield return resultSelector(element, innerElement);
+                    }
+                }
+            }
+        }
+
+        public static IEnumerable<TSource> Distinct<TSource>(
+                    this IEnumerable<TSource> source,
+                    IEqualityComparer<TSource> comparer)
+        {
+            HashSet<TSource> notAdded = new HashSet<TSource>(comparer);
+            foreach (var item in source)
+            {
+                if (notAdded.Add(item))
+                {
+                    yield return item;
+                }
+            }
+        }
+
+        public static IEnumerable<TSource> Union<TSource>(
+    this IEnumerable<TSource> first,
+    IEnumerable<TSource> second,
+    IEqualityComparer<TSource> comparer)
+        {
+            HashSet<TSource> notAdded = new HashSet<TSource>(comparer);
+            foreach (var element in first)
+            {
+                if (notAdded.Add(element))
+                {
+                    yield return element;
+                }
+            }
+
+            foreach (var element in second)
+            {
+                if (notAdded.Add(element))
+                {
+                    yield return element;
+                }
+            }
+
+
+
         }
 
     }
