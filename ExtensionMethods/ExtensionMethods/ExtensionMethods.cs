@@ -153,9 +153,9 @@ namespace ExtensionMethods
         }
 
         public static IEnumerable<TSource> Union<TSource>(
-    this IEnumerable<TSource> first,
-    IEnumerable<TSource> second,
-    IEqualityComparer<TSource> comparer)
+                    this IEnumerable<TSource> first,
+                    IEnumerable<TSource> second,
+                    IEqualityComparer<TSource> comparer)
         {
             HashSet<TSource> notAdded = new HashSet<TSource>(comparer);
             foreach (var element in first)
@@ -173,9 +173,36 @@ namespace ExtensionMethods
                     yield return element;
                 }
             }
+        }
 
+        public static IEnumerable<TSource> Intersect<TSource>(
+                  this IEnumerable<TSource> first,
+                  IEnumerable<TSource> second,
+                  IEqualityComparer<TSource> comparer)
+        {
+            HashSet<TSource> notAdded = new HashSet<TSource>(second, comparer);
+            foreach (var element in first)
+            {
+                if (notAdded.Remove(element))
+                {
+                    yield return element;
+                }
+            }
+        }
 
-
+        public static IEnumerable<TSource> Except<TSource>(
+                  this IEnumerable<TSource> first,
+                  IEnumerable<TSource> second,
+                  IEqualityComparer<TSource> comparer)
+        {
+            HashSet<TSource> notAdded = new HashSet<TSource>(second, comparer);
+            foreach (var element in first)
+            {
+                if (!notAdded.Remove(element))
+                {
+                    yield return element;
+                }
+            }
         }
 
     }

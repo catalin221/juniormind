@@ -151,5 +151,21 @@ namespace ExtensionMethods
             int[] secondArray = { 8, 3, 6, 4, 4, 9, 1, 0 };
             Assert.Equal(new[] { 5, 3, 9, 7, 8, 6, 4, 1, 0 }, firstArray.Union(secondArray, new ItemComparer<int>()));
         }
+
+        [Fact]
+        public void Intersect_Returns_Common_Integers()
+        {
+            int[] firstArray = { 5, 3, 9, 4 };
+            int[] secondArray = { 8, 3, 6, 4 };
+            Assert.Equal(new[] { 3, 4 }, firstArray.Intersect(secondArray, new ItemComparer<int>()));
+        }
+
+        [Fact]
+        public void Except_Returns_Not_Common_Integers()
+        {
+            int[] firstArray = { 5, 3, 9, 4 };
+            int[] secondArray = { 8, 3, 6, 4 };
+            Assert.Equal(new[] { 5, 9 }, firstArray.Except(secondArray, new ItemComparer<int>()));
+        }
     }
 }
