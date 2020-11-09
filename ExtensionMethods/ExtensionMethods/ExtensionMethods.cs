@@ -8,8 +8,8 @@ namespace ExtensionMethods
     {
         public static bool All<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            ThrowNullSourceException(source);
-            ThrowNullFunction(predicate);
+            ThrowNullException(source);
+            ThrowNullException(predicate);
             foreach (var element in source)
             {
                 if (!predicate(element))
@@ -23,8 +23,8 @@ namespace ExtensionMethods
 
         public static bool Any<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            ThrowNullSourceException(source);
-            ThrowNullFunction(predicate);
+            ThrowNullException(source);
+            ThrowNullException(predicate);
             foreach (var element in source)
             {
                 if (predicate(element))
@@ -38,8 +38,8 @@ namespace ExtensionMethods
 
         public static TSource First<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            ThrowNullSourceException(source);
-            ThrowNullFunction(predicate);
+            ThrowNullException(source);
+            ThrowNullException(predicate);
             foreach (var element in source)
             {
                 if (predicate(element))
@@ -53,8 +53,8 @@ namespace ExtensionMethods
 
         public static IEnumerable<TResult> Select<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
         {
-            ThrowNullSourceException(source);
-            ThrowNullSelectorException(selector);
+            ThrowNullException(source);
+            ThrowNullException(selector);
             foreach (var element in source)
             {
                 yield return selector(element);
@@ -63,8 +63,8 @@ namespace ExtensionMethods
 
         public static IEnumerable<TResult> SelectMany<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, IEnumerable<TResult>> selector)
         {
-            ThrowNullSourceException(source);
-            ThrowNullSelectorException(selector);
+            ThrowNullException(source);
+            ThrowNullException(selector);
             foreach (var item in source)
             {
                 foreach (var result in selector(item))
@@ -76,8 +76,8 @@ namespace ExtensionMethods
 
         public static IEnumerable<TSource> Where<TSource>(this IEnumerable<TSource> source, Func<TSource, bool> predicate)
         {
-            ThrowNullSourceException(source);
-            ThrowNullFunction(predicate);
+            ThrowNullException(source);
+            ThrowNullException(predicate);
             foreach (var element in source)
             {
                 if (predicate(element))
@@ -92,9 +92,9 @@ namespace ExtensionMethods
                     Func<TSource, TKey> keySelector,
                     Func<TSource, TElement> elementSelector)
         {
-            ThrowNullSourceException(source);
-            ThrowNullSelectorException(keySelector);
-            ThrowNullSelectorException(elementSelector);
+            ThrowNullException(source);
+            ThrowNullException(keySelector);
+            ThrowNullException(elementSelector);
             Dictionary<TKey, TElement> dictionary = new Dictionary<TKey, TElement>();
             foreach (var element in source)
             {
@@ -109,9 +109,9 @@ namespace ExtensionMethods
                     IEnumerable<TSecond> second,
                     Func<TFirst, TSecond, TResult> resultSelector)
         {
-            ThrowNullSourceException(first);
-            ThrowNullSourceException(second);
-            ThrowNullSelectorException(resultSelector);
+            ThrowNullException(first);
+            ThrowNullException(second);
+            ThrowNullException(resultSelector);
             var firstElement = first.GetEnumerator();
             var secondElement = second.GetEnumerator();
 
@@ -126,8 +126,8 @@ namespace ExtensionMethods
                     TAccumulate seed,
                     Func<TAccumulate, TSource, TAccumulate> func)
         {
-            ThrowNullAgrregateFunction(func);
-            ThrowNullSourceException(source);
+            ThrowNullException(func);
+            ThrowNullException(source);
             TAccumulate result = seed;
             foreach (var element in source)
             {
@@ -144,11 +144,11 @@ namespace ExtensionMethods
                     Func<TInner, TKey> innerKeySelector,
                     Func<TOuter, TInner, TResult> resultSelector)
         {
-            ThrowNullSourceException(outer);
-            ThrowNullSourceException(inner);
-            ThrowNullSelectorException(outerKeySelector);
-            ThrowNullSelectorException(innerKeySelector);
-            ThrowNullSelectorException(resultSelector);
+            ThrowNullException(outer);
+            ThrowNullException(inner);
+            ThrowNullException(outerKeySelector);
+            ThrowNullException(innerKeySelector);
+            ThrowNullException(resultSelector);
             foreach (var element in outer)
             {
                 foreach (var innerElement in inner)
@@ -165,7 +165,7 @@ namespace ExtensionMethods
                     this IEnumerable<TSource> source,
                     IEqualityComparer<TSource> comparer)
         {
-            ThrowNullSourceException(source);
+            ThrowNullException(source);
             HashSet<TSource> notAdded = new HashSet<TSource>(comparer);
             foreach (var item in source)
             {
@@ -181,8 +181,8 @@ namespace ExtensionMethods
                     IEnumerable<TSource> second,
                     IEqualityComparer<TSource> comparer)
         {
-            ThrowNullSourceException(first);
-            ThrowNullSourceException(second);
+            ThrowNullException(first);
+            ThrowNullException(second);
             HashSet<TSource> notAdded = new HashSet<TSource>(comparer);
             foreach (var element in first)
             {
@@ -206,8 +206,8 @@ namespace ExtensionMethods
                   IEnumerable<TSource> second,
                   IEqualityComparer<TSource> comparer)
         {
-            ThrowNullSourceException(first);
-            ThrowNullSourceException(second);
+            ThrowNullException(first);
+            ThrowNullException(second);
             HashSet<TSource> notAdded = new HashSet<TSource>(second, comparer);
             foreach (var element in first)
             {
@@ -223,8 +223,8 @@ namespace ExtensionMethods
                   IEnumerable<TSource> second,
                   IEqualityComparer<TSource> comparer)
         {
-            ThrowNullSourceException(first);
-            ThrowNullSourceException(second);
+            ThrowNullException(first);
+            ThrowNullException(second);
             HashSet<TSource> notAdded = new HashSet<TSource>(second, comparer);
             foreach (var element in first)
             {
@@ -236,16 +236,16 @@ namespace ExtensionMethods
         }
 
         public static IEnumerable<TResult> GroupBy<TSource, TKey, TElement, TResult>(
-    this IEnumerable<TSource> source,
-    Func<TSource, TKey> keySelector,
-    Func<TSource, TElement> elementSelector,
-    Func<TKey, IEnumerable<TElement>, TResult> resultSelector,
-    IEqualityComparer<TKey> comparer)
+                this IEnumerable<TSource> source,
+                Func<TSource, TKey> keySelector,
+                Func<TSource, TElement> elementSelector,
+                Func<TKey, IEnumerable<TElement>, TResult> resultSelector,
+                IEqualityComparer<TKey> comparer)
         {
-            ThrowNullSourceException(source);
-            ThrowNullSelectorException(keySelector);
-            ThrowNullSelectorException(elementSelector);
-            ThrowNullSelectorException(resultSelector);
+            ThrowNullException(source);
+            ThrowNullException(keySelector);
+            ThrowNullException(elementSelector);
+            ThrowNullException(resultSelector);
             Dictionary<TKey, List<TElement>> dictionary = new Dictionary<TKey, List<TElement>>(comparer);
             foreach (var element in source)
             {
@@ -267,48 +267,27 @@ namespace ExtensionMethods
             }
         }
 
-        private static void ThrowNullAgrregateFunction<TSource, TAccumulate>(Func<TAccumulate, TSource, TAccumulate> func)
+        public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
+                this IEnumerable<TSource> source,
+                Func<TSource, TKey> keySelector,
+                IComparer<TKey> comparer)
         {
-            if (func != null)
-            {
-                return;
-            }
-
-            throw new ArgumentNullException("func");
+            ThrowNullException(source);
+            ThrowNullException(keySelector);
+            return new OrderedEnumerable<TSource>(source, new ProjectionComparer<TSource, TKey>(keySelector, comparer));
         }
 
-        private static void ThrowNullFunction<TSource>(Func<TSource, bool> func)
+        public static IOrderedEnumerable<TSource> ThenBy<TSource, TKey>(
+                this IOrderedEnumerable<TSource> source,
+                Func<TSource, TKey> keySelector,
+                IComparer<TKey> comparer)
         {
-            if (func != null)
-            {
-                return;
-            }
-
-            throw new ArgumentNullException("func");
+            ThrowNullException(source);
+            ThrowNullException(keySelector);
+            return source.CreateOrderedEnumerable(keySelector, comparer, false);
         }
 
-        private static void ThrowNullSelectorException<TSource, TResult>(
-            Func<TSource, TResult> selector)
-        {
-            if (selector != null)
-            {
-                return;
-            }
-
-            throw new ArgumentNullException("selector");
-        }
-
-        private static void ThrowNullSelectorException<TOuter, TInner, TResult>(Func<TOuter, TInner, TResult> resultSelector)
-        {
-            if (resultSelector != null)
-            {
-                return;
-            }
-
-            throw new ArgumentNullException("resultSelector");
-        }
-
-        private static void ThrowNullSourceException<TSource>(IEnumerable<TSource> source)
+        private static void ThrowNullException(object source)
         {
             if (source != null)
             {

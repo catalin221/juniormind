@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# RCS1241: Implement non-generic counterpart.
+dotnet_diagnostic.RCS1241.severity = none
