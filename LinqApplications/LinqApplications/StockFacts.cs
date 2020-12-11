@@ -43,22 +43,5 @@ namespace LinqApplications
             products.Buy("snickers", 5);
             Assert.Equal(10, products.GetQuantity(snickers));
         }
-
-        [Fact]
-        public void CallbackShouldBeCalledAfterBuy()
-        {
-            var products = new Stock(new List<Product> { new Product("snickers", 15) });
-            int testQuantity = 0;
-            Product testProduct = null;
-            void TestCallback(Product product, int quantity)
-            {
-                testProduct = product;
-                testQuantity = quantity;
-            }
-
-            products.AddCalback(TestCallback);
-            products.Buy("snickers", 6);
-            Assert.Equal(9, testQuantity);
-        }
     }
 }

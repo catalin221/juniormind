@@ -1,4 +1,5 @@
 ﻿using Xunit;
+using System;
 
 namespace LinqApplications
 {
@@ -8,10 +9,7 @@ namespace LinqApplications
         public void CheckVowelsAndConsonantsNumber()
         {
             const string testWord = "abcdef";
-            int vowels = 0;
-            int consonants = 0;
-            StringFiltering.CountVowelsAndConsonants(testWord, ref vowels, ref consonants);
-            Assert.Equal((2, 4), (vowels, consonants));
+            Assert.Equal((2, 4), StringFiltering.CountVowelsAndConsonants(testWord));
         }
 
         [Fact]
@@ -33,6 +31,48 @@ namespace LinqApplications
         {
             const string testWord = "cbeabcca";
             Assert.Equal('c', StringFiltering.FindCharacterWithMostOccurences(testWord));
+        }
+
+        [Fact]
+        public void ConvertsNumberWithWhitespaces()
+        {
+            const string testWord = "10 000";
+            Assert.Equal(10000, StringFiltering.ConvertToInt(testWord));
+        }
+
+        [Fact]
+        public void ConvertsNumberWithSign()
+        {
+            const string testWord = "-10 000";
+            Assert.Equal(-10000, StringFiltering.ConvertToInt(testWord));
+        }
+
+        [Fact]
+        public void ConvertsNumberWithWhitespacesAndSign()
+        {
+            const string testWord = "+10 0 0 0";
+            Assert.Equal(10000, StringFiltering.ConvertToInt(testWord));
+        }
+
+        [Fact]
+        public void DoesNotConvertNumberWithTwoSigns()
+        {
+            const string testWord = "+-10000";
+            Assert.Throws<InvalidOperationException>(() => StringFiltering.ConvertToInt(testWord));
+        }
+
+        [Fact]
+        public void DoesNotConvertNumberWithLetters()
+        {
+            const string testWord = "10000b";
+            Assert.Throws<InvalidOperationException>(() => StringFiltering.ConvertToInt(testWord));
+        }
+
+        [Fact]
+        public void DoesNotConvertNumberWithTwoSignsReversed()
+        {
+            const string testWord = "-+10000";
+            Assert.Throws<InvalidOperationException>(() => StringFiltering.ConvertToInt(testWord));
         }
     }
 }
