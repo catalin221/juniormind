@@ -28,7 +28,7 @@ namespace LinqApplications
         {
             ThrowNullException(word);
             bool negative = false;
-            string newWord = RemoveSignsAndWhitespaces(word, ref negative);
+            string newWord = RemoveSigns(word, ref negative);
             int positive = newWord.Aggregate(0, (sum, current) => sum * 10 + ConvertCharToInt(current));
             return negative ? -positive : positive;
         }
@@ -48,12 +48,14 @@ namespace LinqApplications
             return character >= '0' && character <= '9';
         }
 
-        private static string RemoveSignsAndWhitespaces(string word, ref bool negative)
+        private static string RemoveSigns(string word, ref bool negative)
         {
-            string withoutWhitespaces = word.Aggregate("", (word, character) => character == ' ' ? word : word + character);
-            negative = "-".Contains(withoutWhitespaces.First());
-            return "+-".Contains(withoutWhitespaces.First()) ? withoutWhitespaces.Substring(1) : withoutWhitespaces;
+            string withoutWhitespaces = RemoveWhitespaces(word);
+            negative = withoutWhitespaces.StartsWith('-');
+            return withoutWhitespaces.StartsWith('-') || withoutWhitespaces.StartsWith('+') ? withoutWhitespaces.Substring(1) : withoutWhitespaces;
         }
+
+        private static string RemoveWhitespaces(string word) => new string(word.Where(element => element != ' ').ToArray());
 
         private static void ThrowNullException(string word)
         {

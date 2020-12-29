@@ -17,14 +17,16 @@ namespace LinqApplications
         }
 
         [Fact]
-        public void AllFeaturesProductsFindsProductsWithAllContainingFeatures()
+        public void AllFeatruesProductsFindsProductsWithAllFeatures()
         {
-            var snickersFeatures = new List<Feature> { new Feature(251), new Feature(247) };
-            var snickers = new FeatureProduct("Snickers", snickersFeatures);
-            var bountyFeatures = new List<Feature> { new Feature(240), new Feature(247) };
-            var bounty = new FeatureProduct("Bounty", bountyFeatures);
-            List<FeatureProduct> testList = new List<FeatureProduct> { snickers, bounty };
-            Assert.Equal(new List<FeatureProduct> { snickers }, ListFiltering.AllFeaturesProducts(testList, new List<Feature> { new Feature(251), new Feature(247) }));
+            Feature firstFeature = new Feature(2);
+            Feature secondFeature = new Feature(3);
+            FeatureProduct apples = new FeatureProduct("appels", new List<Feature> { firstFeature, secondFeature });
+            FeatureProduct pears = new FeatureProduct("pears", new List<Feature> { secondFeature });
+            var productList = new List<FeatureProduct> { apples, pears };
+            var filteringCriteria = new List<Feature> { firstFeature, secondFeature };
+            var filtered = ListFiltering.AllFeaturesProducts(productList, filteringCriteria);
+            Assert.Equal(new List<FeatureProduct> { apples }, filtered);
         }
 
         [Fact]

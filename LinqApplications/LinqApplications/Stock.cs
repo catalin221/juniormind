@@ -72,9 +72,9 @@ namespace LinqApplications
         {
             int currentQuantity = product.Quantity;
 
-            return CheckQuantity(previousQuantity, currentQuantity, 10)
-                || CheckQuantity(previousQuantity, currentQuantity, 5)
-                || CheckQuantity(previousQuantity, currentQuantity, 2);
+            return CheckQuantity(currentQuantity, previousQuantity, 10)
+                || CheckQuantity(currentQuantity, previousQuantity, 5)
+                || CheckQuantity(currentQuantity, previousQuantity, 2);
         }
     }
 }
