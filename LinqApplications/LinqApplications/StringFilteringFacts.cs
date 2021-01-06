@@ -69,6 +69,19 @@ namespace LinqApplications
         }
 
         [Fact]
+        public void GeneratePalindromesGeneratesPalindromePartitionsOfString()
+        {
+            const string testWord = "aabaac";
+            Assert.Equal(new[] { "a", "a", "b", "a", "a", "c", "aa", "aa", "aba", "aabaa" }, StringFiltering.GeneratePalindromes(testWord));
+        }
+
+        [Fact]
+        public void GeneratePalindromesThrowsNullStringException()
+        {
+            Assert.Throws<ArgumentNullException>(() => StringFiltering.GeneratePalindromes(null));
+        }
+
+        [Fact]
         public void DoesNotConvertNumberWithTwoSignsReversed()
         {
             const string testWord = "-+10000";

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LinqApplications
@@ -15,6 +16,15 @@ namespace LinqApplications
         public static char FindFirstUniqueCharacter(string word)
         {
             return word.GroupBy(x => x).First(element => element.Count() == 1).Key;
+        }
+
+        public static IEnumerable<string> GeneratePalindromes(string source)
+        {
+            ThrowNullException(source);
+            return Enumerable.Range(1, source.Length).SelectMany(length => Enumerable
+                                                   .Range(0, source.Length - length + 1)
+                                                   .Select(index => source.Substring(index, length)))
+                                                   .Where(item => item.SequenceEqual(item.Reverse()));
         }
 
         public static char FindCharacterWithMostOccurences(string word)
