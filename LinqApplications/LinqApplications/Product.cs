@@ -1,4 +1,6 @@
-﻿namespace LinqApplications
+﻿using System;
+
+namespace LinqApplications
 {
     public class Product
     {
@@ -11,5 +13,20 @@
         public string Name { get; }
 
         public int Quantity { get; }
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
+            return obj.Equals(Quantity);
+        }
+
+        public override int GetHashCode()
+        {
+            return Quantity.GetHashCode();
+        }
     }
 }
