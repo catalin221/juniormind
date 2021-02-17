@@ -8,9 +8,10 @@ namespace LinqApplications
     {
         public static IEnumerable<IEnumerable<int>> GetSubsetsOfSpecificSum(IEnumerable<int> source, int maxSum)
         {
+            int count = source.Count();
             return source.SelectMany((x, index) => source.Skip(index)
             .Select((number, secondIndex) => source
-            .Skip(secondIndex).Take(source.Count() - secondIndex - index))
+            .Skip(secondIndex).Take(count - secondIndex - index))
              .Where(x => x.Sum() <= maxSum));
         }
 
@@ -40,15 +41,8 @@ namespace LinqApplications
 
         private static IEnumerable<IEnumerable<int>> GetTriplePermutations(int first, int second, int third)
         {
-            return PermuteElements(first, second, third)
+            return CreateEnumerable(first, second, third)
                    .Where(x => IsPythagoreanTriple(x.First(), x.ElementAt(1), x.Last()));
-        }
-
-        private static IEnumerable<IEnumerable<int>> PermuteElements(int first, int second, int third)
-        {
-            return first != second
-                ? CreateEnumerable(first, second, third)
-                : new[] { new[] { 0, 0, 0 } };
         }
 
         private static IEnumerable<IEnumerable<int>> CreateEnumerable(int first, int second, int third)
