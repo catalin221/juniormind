@@ -10,9 +10,9 @@ namespace LinqApplications
         {
             ThrowNullException(expression);
 
-            return expression.Split().Aggregate(Enumerable.Empty<double>(), (operands, current) => IsOperator(current)
-                                    ? UpdateResult(operands, current, 2)
-                                    : operands.Append(Convert.ToDouble(current))).First();
+            return expression.Split().Aggregate(Enumerable.Empty<double>(), (operands, current) => double.TryParse(current, out double value)
+            ? operands.Append(value)
+            : UpdateResult(operands, current, 2)).First();
         }
 
         private static IEnumerable<double> UpdateResult(IEnumerable<double> operands, string current, int skip)
@@ -31,11 +31,6 @@ namespace LinqApplications
                 "*" => firstOperand * secondOperand,
                 "/" => firstOperand / secondOperand,
             };
-        }
-
-        private static bool IsOperator(string element)
-        {
-            return "+-*/".Contains(element);
         }
 
         private static void ThrowNullException(string source)
