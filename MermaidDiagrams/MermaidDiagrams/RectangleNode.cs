@@ -13,11 +13,12 @@ namespace MermaidDiagrams
             text = input;
         }
 
-        public string Draw()
+        public string Draw(int atX, int atY)
         {
-            return "<rect width =\"150\" height =\"45\" x =\"1\" y =\"100\" " +
-                   "style = \"fill:rgb(201, 219, 201) ; stroke-width:2; stroke: rgb(0, 0, 0)\" />" +
-                   "<text x =\"25\" y=\"120\" fill =\"black\" >" + text + "</text >";
+            const string quote = "\"";
+            return "<rect width =\"150\" height =\"50\" x =" + quote + atX + quote + " y =" + quote + atY + quote +
+                    " style = \"fill:rgb(201, 219, 201) ; stroke-width:1; stroke: rgb(0, 0, 0)\" />" +
+                   "<text x =" + quote + (atX + 2) + " y=" + quote + (atY + 10) + quote + " fill =\"black\" >" + text + "</text >";
         }
     }
 }

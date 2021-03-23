@@ -6,10 +6,12 @@ namespace MermaidDiagrams
 {
     public static class FlowchartDiagram
     {
-        public static void DrawFlowchart(List<IFlowchartShape> shapes, string path)
+        public static void DrawFlowchart(List<IFlowchartShape> shapes, string path, string orientation)
         {
             ThrowNullException(shapes);
-            const string namespaceAndDimensions = "<svg xmlns =\"http://www.w3.org/2000/svg\" width =\"1920\" height =\"1080\">";
+            int width = 0;
+            int height = 0;
+            string namespaceAndDimensions = "<svg xmlns =\"http://www.w3.org/2000/svg\" width =" + width + " height = " + height + ">";
             const string svgEnd = "</svg>";
             string file = namespaceAndDimensions;
 
@@ -22,6 +24,11 @@ namespace MermaidDiagrams
             StreamWriter write = File.CreateText(path);
             write.Write(file);
             write.Close();
+        }
+
+        private void UpdateBackground(int width, int height)
+        {
+
         }
 
         private static void ThrowNullException(List<IFlowchartShape> argument)

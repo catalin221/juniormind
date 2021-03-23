@@ -2,6 +2,6 @@
 {
     public interface IFlowchartShape
     {
-        public string Draw();
+        public string Draw(int atX, int atY);
     }
 }
