@@ -1,23 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MermaidDiagrams
+﻿namespace MermaidDiagrams
 {
     public class StadiumNode : IFlowchartShape
     {
         private readonly string text;
+        private (int width, int height) dimensions;
 
         public StadiumNode(string input)
         {
             text = input;
+            dimensions = (50, 40);
         }
 
-        public string Draw()
+        public string Draw(int atX, int atY)
         {
-            return "<rect width =\"150\" height =\"45\" x =\"1\" y =\"100\" rx =\"10\" ry =\"5\" " +
-                  "style = \"fill:rgb(201, 219, 201) ; stroke-width:2; stroke: rgb(0, 0, 0)\" />" +
-                  "<text x =\"25\" y=\"120\" fill =\"black\" >" + text + "</text >";
+            string textAtX = "\"" + (atX + 2) + "\"";
+            string textAtY = "\"" + (atY + (dimensions.height / 2)) + "\"";
+            const int round = 20;
+
+            return "<rect width =\"" + dimensions.width + "\" height =\"" + dimensions.height + "\" x =\"" + atX + "\" y =\"" + atY + "\"" +
+                   " rx= \"" + round + "\" ry =\"" + round + "\" style = \"fill:#e6fff7 ; stroke-width:1; stroke: rgb(0, 0, 0)\" />" +
+                   "<text x =" + textAtX + " y=" + textAtY + " fill =\"black\" >" + text + "</text >";
+        }
+
+        public (int width, int height) GetDimensions()
+        {
+            return (dimensions.width, dimensions.height);
+        }
+
+        public void UpdateDimensions()
+        {
+            dimensions.width = text.Length * 7;
         }
     }
 }

@@ -7,9 +7,20 @@ namespace MermaidDiagrams
     {
         public static void Main()
         {
-            List<IFlowchartShape> shapes = new List<IFlowchartShape> { new RectangleNode("TextSecondNode") };
+            List<IFlowchartShape> shapes = new List<IFlowchartShape>
+            {
+                new CircleNode("TEXT for circle node"),
+                new RectangleNode("Text for rectangle node"),
+                new CylinderNode("Text for a cylinder node"),
+                new RoundEdgesNode("Text for round edges node"),
+                new StadiumNode("Text for stadium shaped node"),
+                new SubroutineNode("TEXT for subroutine node"),
+                new ParalelogramNode("Text for paralelogram node"),
+                new AltParalelogramNode("Text for AltParalelogram node")
+            };
             Console.WriteLine("Please input path");
-            FlowchartDiagram.DrawFlowchart(shapes, Console.ReadLine());
+            var flowchart = new FlowchartDiagram(shapes, "LR");
+            flowchart.DrawFlowchart(Console.ReadLine());
             Console.WriteLine("File created");
         }
     }
