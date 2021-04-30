@@ -24,15 +24,14 @@ namespace MermaidDiagrams
         {
             ThrowNullException(shapes);
             string temp = "";
-
+            UpdateBackground(shapes.First().GetDimensions().width, shapes.First().GetDimensions().height);
             foreach (var shape in shapes)
             {
                 shape.UpdateDimensions();
-                var toAddX = coordinates.x + shape.GetDimensions().width;
-                var toAddY = coordinates.y + shape.GetDimensions().height;
-                UpdateBackground(toAddX, toAddY);
+                var width = coordinates.x + shape.GetDimensions().width + 100;
+                var height = coordinates.y + shape.GetDimensions().height + 100;
+                UpdateBackground(width, height);
                 temp += shape.Draw(coordinates.x, coordinates.y);
-
                 UpdateCoordinates(shape.GetDimensions().width + 100, 0);
             }
 
@@ -43,10 +42,15 @@ namespace MermaidDiagrams
             write.Close();
         }
 
-        private void UpdateBackground(int toAddX, int toAddY)
-        {
-            background.width += toAddX;
-            background.height += toAddY;
+        private void UpdateBackground(int width, int height)
+            {
+            background.width = width;
+            if (height <= background.height)
+            {
+                return;
+            }
+
+            background.height = height;
         }
 
         private void UpdateCoordinates(int toAddX, int toAddY)

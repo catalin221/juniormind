@@ -1,4 +1,6 @@
-﻿namespace MermaidDiagrams
+﻿using System;
+
+namespace MermaidDiagrams
 {
     public class CylinderNode : IFlowchartShape
     {

@@ -16,7 +16,8 @@ namespace MermaidDiagrams
                 new StadiumNode("Text for stadium shaped node"),
                 new SubroutineNode("TEXT for subroutine node"),
                 new ParalelogramNode("Text for paralelogram node"),
-                new AltParalelogramNode("Text for AltParalelogram node")
+                new AltParalelogramNode("Text for AltParalelogram node"),
+                new AssymetricNode("Text for Assymetric node")
             };
             Console.WriteLine("Please input path");
             var flowchart = new FlowchartDiagram(shapes, "LR");

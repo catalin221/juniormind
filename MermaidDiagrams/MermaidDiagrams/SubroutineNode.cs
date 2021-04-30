@@ -31,7 +31,12 @@
 
         public void UpdateDimensions()
         {
-            dimensions.width = text.Length * 8;
+            if (text.Length <= 5)
+            {
+                return;
+            }
+
+            dimensions.width += text.Length * 8;
         }
     }
 }
