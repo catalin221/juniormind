@@ -27,11 +27,11 @@ namespace MermaidDiagrams
             UpdateBackground(shapes.First().GetDimensions().width, shapes.First().GetDimensions().height);
             foreach (var shape in shapes)
             {
+                shape.UpdateCoordinates(coordinates);
                 shape.UpdateDimensions();
-                var width = coordinates.x + shape.GetDimensions().width + 100;
-                var height = coordinates.y + shape.GetDimensions().height + 100;
+                (int width, int height) = (coordinates.x + shape.GetDimensions().width + 100, coordinates.y + shape.GetDimensions().height + 100);
                 UpdateBackground(width, height);
-                temp += shape.Draw(coordinates.x, coordinates.y);
+                temp += shape.Draw();
                 UpdateCoordinates(shape.GetDimensions().width + 100, 0);
             }
 

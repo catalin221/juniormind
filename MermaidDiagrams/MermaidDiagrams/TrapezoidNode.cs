@@ -1,12 +1,12 @@
 ﻿namespace MermaidDiagrams
 {
-    public class ParalelogramNode : IFlowchartShape
+    public class TrapezoidNode : IFlowchartShape
     {
         private readonly string text;
         private (int width, int height) dimensions;
         private (int x, int y) coordinates;
 
-        public ParalelogramNode(string input)
+        public TrapezoidNode(string input)
         {
             text = input;
             dimensions = (50, 40);
@@ -18,7 +18,7 @@
             string textAtY = "\"" + (coordinates.y + (dimensions.height / 2)) + "\"";
             string pointA = coordinates.x.ToString() + ',' + (coordinates.y + dimensions.height).ToString();
             string pointB = (coordinates.x + dimensions.width).ToString() + ',' + (coordinates.y + dimensions.height).ToString() + ' ';
-            string pointC = (coordinates.x + dimensions.width + 25).ToString() + ',' + coordinates.y.ToString() + ' ';
+            string pointC = (coordinates.x + dimensions.width - 25).ToString() + ',' + coordinates.y.ToString() + ' ';
             string pointD = (coordinates.x + 25).ToString() + ',' + coordinates.y.ToString() + ' ';
             string pointE = pointA;
 

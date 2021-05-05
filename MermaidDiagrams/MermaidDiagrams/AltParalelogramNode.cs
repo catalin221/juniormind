@@ -4,6 +4,7 @@
     {
         private readonly string text;
         private (int width, int height) dimensions;
+        private (int x, int y) coordinates;
 
         public AltParalelogramNode(string input)
         {
@@ -11,19 +12,29 @@
             dimensions = (50, 40);
         }
 
-        public string Draw(int atX, int atY)
+        public string Draw()
         {
-            string textAtX = "\"" + (atX + 45) + "\"";
-            string textAtY = "\"" + (atY + (dimensions.height / 2)) + "\"";
+            string textAtX = "\"" + (coordinates.x + 25) + "\"";
+            string textAtY = "\"" + (coordinates.y + (dimensions.height / 2)) + "\"";
+            string pointA = coordinates.x.ToString() + ',' + (coordinates.y + dimensions.height).ToString();
+            string pointB = (coordinates.x + dimensions.width).ToString() + ',' + (coordinates.y + dimensions.height).ToString() + ' ';
+            string pointC = (coordinates.x + dimensions.width - 25).ToString() + ',' + coordinates.y.ToString() + ' ';
+            string pointD = (coordinates.x - 25).ToString() + ',' + coordinates.y.ToString() + ' ';
+            string pointE = pointA;
 
-            return "<rect width =\"" + dimensions.width + "\" height =\"" + dimensions.height + "\" x =\"" + atX + "\" y =\"" + atY + "\"" +
-                   "  transform=\"skewX(+25)\" style = \"fill:#e6fff7 ; stroke-width:1; stroke: rgb(0, 0, 0)\" />" +
+            return "<polyline points=\"" + pointA + ' ' + pointB + pointC + pointD + pointE +
+                   "\" style=\"fill:#e6fff7;stroke:black;stroke-width:1\" />" +
                    "<text x =" + textAtX + " y=" + textAtY + " fill =\"black\" >" + text + "</text >";
         }
 
         public (int width, int height) GetDimensions()
         {
             return (dimensions.width, dimensions.height);
+        }
+
+        public void UpdateCoordinates((int x, int y) coordinates)
+        {
+            this.coordinates = coordinates;
         }
 
         public void UpdateDimensions()
