@@ -27,7 +27,7 @@ namespace Flowchart
             SetOrientation();
             string temp = "";
             drawOrientation.Draw(ref temp, background);
-            string file = "<svg xmlns =\"http://www.w3.org/2000/svg\" width =\"" + background.width + "\" height =\"" + background.height + "\">" + temp + "</svg>";
+            string file = "<svg width =\"" + background.width + "\" height =\"" + background.height + "\">" + temp + "</svg>";
             StreamWriter write = File.CreateText(path);
             write.Write(file);
             write.Close();

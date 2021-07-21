@@ -29,6 +29,11 @@
             return (dimensions.width, dimensions.height);
         }
 
+        public (int x, int y) GetCoordinates()
+        {
+            return coordinates;
+        }
+
         public void UpdateCoordinates((int x, int y) coordinates)
         {
             this.coordinates = coordinates;

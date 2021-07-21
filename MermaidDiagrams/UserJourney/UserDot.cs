@@ -21,6 +21,11 @@
             return (dimensions.width, dimensions.height);
         }
 
+        public string GetColor()
+        {
+            return this.color;
+        }
+
         public void UpdateCoordinates((int x, int y) coordinates)
         {
             this.coordinates = coordinates;
