@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Text;
+using System.Linq;
 
 namespace UserJourney
 {
@@ -7,6 +7,8 @@ namespace UserJourney
     {
         readonly Dictionary<string, List<(string actionName, int score, List<string> users)>> sections;
         readonly Dictionary<int, int> scoreHeight;
+        List<UserDotId> listOfUsers;
+        (int horizontalUserId, int verticalUserId) userCoords;
         (int horizontalTitle, int verticalTitle) titleCoords;
         (int horizontalSection, int verticalSection) sectionCoords;
         (int horizontalAction, int verticalAction) actionCoords;
@@ -17,6 +19,7 @@ namespace UserJourney
         {
             this.sections = sections;
             titleCoords = (150, 80);
+            userCoords = (20, sectionCoords.verticalSection + 4);
             sectionCoords = (titleCoords.horizontalTitle, titleCoords.verticalTitle + 20);
             actionCoords = (titleCoords.horizontalTitle, sectionCoords.verticalSection + 10);
             arrowCoords = (titleCoords.horizontalTitle, actionCoords.verticalAction + 20);
@@ -46,9 +49,6 @@ namespace UserJourney
                     UpdateActionCoordinates(actionRectangle.GetDimensions().width);
                     numberOfActions++;
                     lastAction = actionRectangle;
-                    foreach (string user in action.users)
-                    {
-                    }
                 }
 
                 UpdateSectionCoordinates(lastAction.GetDimensions().width);
@@ -57,6 +57,32 @@ namespace UserJourney
             Arrow drawArrow = new Arrow((numberOfActions * 150) + (numberOfActions * 20));
             drawArrow.UpdateCoordinates(arrowCoords);
             UpdateBackground(drawArrow.GetDimensions());
+        }
+
+        private void DrawUserDot(List<string> users, string[] userDotColors, out int colorIndex)
+            {
+            colorIndex = 0;
+            foreach (string user in users)
+            {
+                UserDotId newUser = new UserDotId(user, userDotColors[colorIndex]);
+                if (listOfUsers.Any(x => x.GetId() == newUser.GetId()))
+                {
+                    var foundUser = new UserDot(listOfUsers.First(x => x.GetId() == user).GetColor());
+                }
+                else
+                {
+                    listOfUsers.Add(newUser);
+                    newUser.Draw();
+                    colorIndex++;
+                }
+            }
+
+            if (colorIndex != userDotColors.Length)
+            {
+                return;
+            }
+
+            colorIndex = 0;
         }
 
         private void DrawActionRectangle((string actionName, int score, List<string> users) action, string[] rectangleColors, int colorIndex, out ActionRectangle actionRectangle)
