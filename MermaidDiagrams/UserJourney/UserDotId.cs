@@ -16,7 +16,7 @@
         public string Draw()
         {
             (int x, int y) textCoord = (coordinates.x + 20, coordinates.y + 5);
-            return "<circle cx=\"" + coordinates.x + "\" cy=\"" + coordinates.y + "\" r=\"7\" stroke=\"black\" stroke-width=\"1\" fill=\"(" + color + ")\" /> " +
+            return "<circle cx=\"" + coordinates.x + "\" cy=\"" + coordinates.y + "\" r=\"7\" stroke=\"black\" stroke-width=\"1\" fill=\"rgb(" + color + ")\" /> " +
                 "<text x=\"" + textCoord.x + "\" y=\"" + textCoord.y + "\" font-size=\"14\">" + id + "</text>\"";
         }
 

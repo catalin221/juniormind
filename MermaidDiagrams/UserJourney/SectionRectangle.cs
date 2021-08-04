@@ -17,7 +17,7 @@
         public string Draw()
         {
             string rectangle = "<rect x=\"" + coordinates.x + "\" y=\"" + coordinates.y + "\" width=\"" + dimensions.width + "\" " +
-                               "height=\"" + dimensions.height + "\" rx=\"3\" fill=\"" + color + "\" />";
+                               "height=\"" + dimensions.height + "\" rx=\"3\" fill=\"rgb(" + color + ")\" />";
             string text = "<text x=\"" + (coordinates.x + (dimensions.width / 2)) + "\" y=\"" + (coordinates.y + (dimensions.height / 2)) + "\" dominant-baseline=\"middle\" " +
                           "text-anchor=\"middle\">" + action + "<text>";
 

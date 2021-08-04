@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -7,25 +8,27 @@ namespace UserJourney
     public class DrawUserJourney
     {
         readonly Dictionary<string, List<(string actionName, int score, List<string> users)>> sections;
-        readonly Dictionary<int, int> scoreHeight;
         readonly List<UserDotId> listOfUsers;
+        readonly string title;
         (int horizontalUserId, int verticalUserId) userIdCoords;
+        (int horizontalFace, int verticalFace) faceCoords;
         (int horizontalTitle, int verticalTitle) titleCoords;
         (int horizontalSection, int verticalSection) sectionCoords;
         (int horizontalAction, int verticalAction) actionCoords;
         (int horizontalArrow, int verticalArrow) arrowCoords;
         (int width, int height) background = (0, 0);
 
-        public DrawUserJourney(Dictionary<string, List<(string actionName, int score, List<string> users)>> sections)
+        public DrawUserJourney(Dictionary<string, List<(string actionName, int score, List<string> users)>> sections, string title)
         {
+            this.title = title;
             listOfUsers = null;
             this.sections = sections;
             titleCoords = (150, 80);
             userIdCoords = (20, sectionCoords.verticalSection + 4);
             sectionCoords = (titleCoords.horizontalTitle, titleCoords.verticalTitle + 20);
             actionCoords = (titleCoords.horizontalTitle, sectionCoords.verticalSection + 10);
+            faceCoords = (actionCoords.horizontalAction, 0);
             arrowCoords = (titleCoords.horizontalTitle, actionCoords.verticalAction + 20);
-            scoreHeight = new Dictionary<int, int> { { 5, 40 }, { 3, 80 }, { 1, 120 } };
         }
 
         public void DrawJourney(string path)
@@ -48,7 +51,9 @@ namespace UserJourney
             };
 
             string[] userDotColors = new[] { "90, 252, 3", "6, 194, 112", "203, 235, 190", "198, 190, 235", "231, 235, 190", "235, 208, 190" };
-
+            string drawTitle = "<text x=\"" + titleCoords.horizontalTitle + "\" y=\"" + titleCoords.verticalTitle +
+                               "\" font-size=35px>\"" + title + "<text>";
+            background += drawTitle;
             int colorIndex = -1;
             int numberOfActions = 0;
             foreach (var section in sections)
@@ -64,6 +69,7 @@ namespace UserJourney
                     lastAction = actionRectangle;
                     (int x, int y) actionCoordinates = actionRectangle.GetCoordinates();
                     DrawUserDots(action.users, userDotColors, out colorIndex, ref background, actionCoordinates);
+                    DrawFace(action.score, ref background, ref faceCoords, actionRectangle.GetCoordinates().x);
                 }
 
                 UpdateSectionCoordinates(lastAction.GetDimensions().width);
@@ -90,11 +96,49 @@ namespace UserJourney
                     newUser.UpdateCoordinates(userIdCoords);
                     background += newUser.Draw();
                     userIdCoords.verticalUserId += 20;
+                    DrawDot(newUser.GetColor(), coordinates, ref background);
                     colorIndex++;
                 }
 
                 CheckIndex(ref colorIndex, userDotColors);
             }
+        }
+
+        private void DrawFace(int score, ref string background, ref (int x, int y) coordinates, int actionCoordX)
+        {
+            IUserJourney face = new SmileyFace();
+            switch (score)
+            {
+                case 5:
+                    {
+                        face = new SmileyFace();
+                        coordinates = (actionCoordX, 40);
+                        break;
+                    }
+
+                case 3:
+                    {
+                        face = new NeutralFace();
+                        coordinates = (actionCoordX, 80);
+                        break;
+                    }
+
+                case 1:
+                    {
+                        face = new SadFace();
+                        coordinates = (actionCoordX, 120);
+                        break;
+                    }
+
+                default:
+                    {
+                        Console.Write("Invalid option!");
+                        break;
+                    }
+            }
+
+            face.UpdateCoordinates(coordinates);
+            background += face.Draw();
         }
 
         private void CheckIndex(ref int index, string[] colors)
