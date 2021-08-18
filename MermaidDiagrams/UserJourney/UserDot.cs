@@ -8,6 +8,7 @@
 
         public UserDot(string color)
         {
+            this.dimensions = (7, 7);
             this.color = color;
         }
 

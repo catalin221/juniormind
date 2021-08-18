@@ -17,7 +17,7 @@
             string leftEye = "<circle cx=\"" + (coordinates.x - 5) + "\" cy=\"" + (coordinates.y - 5) + "\" r=\"2\" stroke=\"grey\" stroke-width=\"2\" fill=\"grey\" />";
             string rightEye = "<circle cx=\"" + (coordinates.x + 5) + "\" cy=\"" + (coordinates.y - 5) + "\" r=\"2\" stroke=\"grey\" stroke-width=\"2\" fill=\"grey\" />";
             (int x1, int y1, int x2, int y2) = (coordinates.x - 5, coordinates.y + 5, coordinates.x + 5, coordinates.y + 5);
-            string mouth = "< line x1 = \"" + x1 + "\" y1 = \"" + y1 + "\" x2 = \"" + x2 + "\" y2 = \"" + y2 + "\" style = \"stroke:grey;stroke-width:2\" />";
+            string mouth = "<line x1 = \"" + x1 + "\" y1 = \"" + y1 + "\" x2 = \"" + x2 + "\" y2 = \"" + y2 + "\" style = \"stroke:grey;stroke-width:2\" />";
             return face + leftEye + rightEye + mouth;
         }
 

@@ -9,6 +9,7 @@
 
         public UserDotId(string id, string color)
         {
+            dimensions = (7, 7);
             this.id = id;
             this.color = color;
         }

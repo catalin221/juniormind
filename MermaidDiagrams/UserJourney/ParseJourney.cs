@@ -1,43 +1,82 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 
 namespace UserJourney
 {
     public class ParseJourney
     {
-        private Dictionary<string, List<(string actionName, int score, List<string> users)>> sections;
+        private readonly Dictionary<string, List<(string actionName, int score, List<string> users)>> sections;
         private string title;
+
+        public ParseJourney()
+        {
+            this.sections = new Dictionary<string, List<(string actionName, int score, List<string> users)>>();
+            this.title = "";
+        }
 
         public void ParseSource(string path)
         {
             StreamReader reader = File.OpenText(path);
-            string line = reader.ReadLine();
-            if (!ValidateJourney(line))
-            {
-                throw new System.InvalidOperationException("The file format is not valid!");
-            }
-
+            int lineCount = 0;
             KeyValuePair<string, List<(string actionName, int score, List<string> users)>> lastEntry =
                 new KeyValuePair<string, List<(string actionName, int score, List<string> users)>>();
-            ParseLine(line, ref lastEntry);
+
+            string line = reader.ReadLine();
+            while (line != null)
+            {
+                lineCount++;
+                if (lineCount == 1)
+                {
+                    ValidateFirstLine(line);
+                }
+                else
+                {
+                    ParseLine(line, ref lastEntry);
+                }
+
+                line = reader.ReadLine();
+            }
+
+            reader.Close();
+        }
+
+        public Dictionary<string, List<(string actionName, int score, List<string> users)>> GetDictionary()
+        {
+            return this.sections;
+        }
+
+        public string GetTitle()
+        {
+            return this.title;
         }
 
         private void ParseLine(string line, ref KeyValuePair<string, List<(string actionName, int score, List<string> users)>> entry)
         {
-            string[] splitLine;
-            TrimAndSplit(line, out splitLine);
-
-            if (CheckIfTitle(splitLine[0]))
+            string firstWord = GetFirstWord(line);
+            if (CheckIfTitle(firstWord))
             {
                 title = ParseSectionOrTitle(line);
             }
-            else if (CheckIfSection(splitLine[0]))
+            else if (CheckIfSection(firstWord))
             {
-                entry = new KeyValuePair<string, List<(string actionName, int score, List<string> users)>>(ParseSectionOrTitle(line), null);
+                entry = new KeyValuePair<string, List<(string actionName, int score, List<string> users)>>(ParseSectionOrTitle(line), new List<(string actionName, int score, List<string> users)>());
                 sections.Add(entry.Key, entry.Value);
             }
+            else if (ValidateAction(line, out (string actionName, int score, List<string> users) values))
+            {
+                sections[entry.Key].Add(values);
+            }
+            else
+            {
+                throw new System.InvalidOperationException("The file format is not valid!");
+            }
+        }
+
+        private string GetFirstWord(string line)
+        {
+            string trimmed = line.Trim();
+            return trimmed.Substring(0, trimmed.TakeWhile(x => x != ' ').Count());
         }
 
         private string ParseSectionOrTitle(string line)
@@ -45,10 +84,6 @@ namespace UserJourney
             string value;
             string[] result;
             TrimAndSplit(line, out result);
-            if (!CheckIfSection(result[0]) || !CheckIfTitle(result[0]))
-            {
-                throw new System.InvalidOperationException("The file format is not valid!");
-            }
 
             if (!ValidateSectionOrTitle(result, out value))
             {
@@ -58,10 +93,72 @@ namespace UserJourney
             return value;
         }
 
+        private void TrimValues(string[] values)
+        {
+            for (int i = 0; i < values.Length; i++)
+            {
+                values[i] = values[i].Trim();
+            }
+        }
+
+        private void TrimAndSplit(string line, out string[] trimmed)
+        {
+            trimmed = line.Trim().Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
+        }
+
+        private void TrimAndSplitAction(string line, out string[] trimmed)
+        {
+            char[] delimiters = { ':', ',' };
+            var temp = line.Trim().Split(delimiters, System.StringSplitOptions.RemoveEmptyEntries);
+            TrimValues(temp);
+            trimmed = temp;
+        }
+
+        private bool ValidateAction(string line, out (string actionName, int score, List<string> actors) values)
+        {
+            TrimAndSplitAction(line, out string[] result);
+            values = default;
+            if (result.Length < 3)
+            {
+                return false;
+            }
+
+            if (!(ValidateActionOrActors(result[0]) && ValidateScore(result[1]) && ValidateActionOrActors(result[2])))
+            {
+                return false;
+            }
+
+            ProcessAction(result, ref values);
+            return true;
+        }
+
+        private void ProcessAction(string[] result, ref (string action, int score, List<string> actors) values)
+        {
+            List<string> tempActors = result.ToList().GetRange(2, result.Length - 2);
+            values = (result[0], System.Convert.ToInt32(result[1]), tempActors);
+        }
+
+        private void ProcessSectionOrTitle(string[] result, ref string value)
+        {
+            for (int i = 1; i < result.Length; i++)
+            {
+                value += result[i] + ' ';
+            }
+        }
+
+        private void ValidateFirstLine(string line)
+            {
+            if (ValidateJourney(line))
+            {
+                return;
+            }
+
+            throw new System.InvalidOperationException("The file format is not valid!");
+        }
+
         private bool ValidateJourney(string line)
         {
-            string[] splitLine;
-            TrimAndSplit(line, out splitLine);
+            TrimAndSplit(line, out string[] splitLine);
             return CheckIfJourney(splitLine[0]) && splitLine.Length == 1;
         }
 
@@ -73,31 +170,23 @@ namespace UserJourney
                 return false;
             }
 
-            ProcessLine(result, ref value);
+            ProcessSectionOrTitle(result, ref value);
             return true;
         }
 
-        private void ProcessLine(string[] result, ref string value)
+        private bool ValidateActionOrActors(string validate)
         {
-            for (int i = 1; i < result.Length; i++)
-            {
-                value += result[i] + ' ';
-            }
+            return !string.IsNullOrEmpty(validate);
         }
 
-        private void TrimAndSplit(string line, out string[] trimmed)
+        private bool ValidateScore(string score)
         {
-            trimmed = line.Trim().Split(' ', System.StringSplitOptions.RemoveEmptyEntries);
+            return score == "1" || score == "3" || score == "5";
         }
 
         private bool CheckIfSection(string toCheck)
         {
             return toCheck.ToLower() == "section";
-        }
-
-        private bool CheckIfAction(string toCheck)
-        {
-            return toCheck.ToLower() == "action";
         }
 
         private bool CheckIfJourney(string toCheck)
