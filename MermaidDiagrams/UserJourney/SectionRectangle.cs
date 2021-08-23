@@ -33,5 +33,10 @@
         {
             this.coordinates = coordinates;
         }
+
+        public (int x, int y) GetCoordinates()
+        {
+            return coordinates;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -7,11 +8,13 @@ namespace UserJourney
     public class ParseJourney
     {
         private readonly Dictionary<string, List<(string actionName, int score, List<string> users)>> sections;
+        private readonly List<string> userID;
         private string title;
 
         public ParseJourney()
         {
             this.sections = new Dictionary<string, List<(string actionName, int score, List<string> users)>>();
+            this.userID = new List<string>();
             this.title = "";
         }
 
@@ -49,6 +52,12 @@ namespace UserJourney
         public string GetTitle()
         {
             return this.title;
+        }
+
+        public List<string> GetUsers()
+        {
+            this.userID.Sort();
+            return userID;
         }
 
         private void ParseLine(string line, ref KeyValuePair<string, List<(string actionName, int score, List<string> users)>> entry)
@@ -136,6 +145,20 @@ namespace UserJourney
         {
             List<string> tempActors = result.ToList().GetRange(2, result.Length - 2);
             values = (result[0], System.Convert.ToInt32(result[1]), tempActors);
+            AddUserIds(tempActors);
+        }
+
+        private void AddUserIds(List<string> actors)
+        {
+            foreach (string actor in actors)
+            {
+                if (userID.Contains(actor))
+                {
+                    continue;
+                }
+
+                userID.Add(actor);
+            }
         }
 
         private void ProcessSectionOrTitle(string[] result, ref string value)
